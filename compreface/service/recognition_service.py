@@ -3,12 +3,10 @@
 from typing import List
 
 from ..common import Service
+from ..collections import FaceCollection
 from ..use_cases import (
-    AddExampleOfSubject,
     RecognizeFaceFromImage,
-    ListOfAllSavedSubjects,
-    DeleteAllExamplesOfSubjectByName,
-    DeleteExampleById
+    VerifyFaceFromImage
 )
 
 
@@ -18,8 +16,8 @@ class RecognitionService(Service):
     def __init__(self, api_key: str, domain: str, port: str):
         """Init service with define API Key"""
         super().__init__(api_key)
-        self.available_services = ['']
-        self.add_example: AddExampleOfSubject = AddExampleOfSubject(
+        self.available_services = []
+        self.verify_face_from_image: VerifyFaceFromImage = VerifyFaceFromImage(
             domain=domain,
             port=port,
             api_key=api_key
@@ -29,17 +27,7 @@ class RecognitionService(Service):
             port=port,
             api_key=api_key
         )
-        self.list_of_all_saved_subjects: ListOfAllSavedSubjects = ListOfAllSavedSubjects(
-            domain=domain,
-            port=port,
-            api_key=api_key
-        )
-        self.delete_all_examples_of_subject_by_name: DeleteAllExamplesOfSubjectByName = DeleteAllExamplesOfSubjectByName(
-            domain=domain,
-            port=port,
-            api_key=api_key
-        )
-        self.delete_all_examples_by_id: DeleteExampleById = DeleteExampleById(
+        self.face_collection: FaceCollection = FaceCollection(
             domain=domain,
             port=port,
             api_key=api_key
@@ -52,24 +40,28 @@ class RecognitionService(Service):
         """
         return self.available_services
 
-    def add_example_of_subject(self, image_path: str, subject: str) -> dict:
+    def verify(self, image_path: str, image_id: str, limit: int = 0, det_prob_threshold: float = 0.8) -> dict:
         """
-
+        Verify image
         :param image_path:
-        :param subject:
+        :param image_id:
+        :param limit:
+        :param det_prob_threshold:
         :return:
         """
-        request = AddExampleOfSubject.Request(
+        request = VerifyFaceFromImage.Request(
             api_key=self.api_key,
             image_path=image_path,
-            subject=subject
+            image_id=image_id,
+            limit=limit,
+            det_prob_threshold=det_prob_threshold
         )
-        return self.add_example.execute(request)
+        return self.verify_face_from_image.execute(request)
 
-    def recognize_face(self, image_path: str, limit: float = 0, det_prob_threshold: float = 0.8,
-                       prediction_count: int = 1) -> dict:
+    def recognize(self, image_path: str, limit: float = 0, det_prob_threshold: float = 0.8,
+                  prediction_count: int = 1) -> dict:
         """
-
+        Recognize image
         :param image_path:
         :param limit:
         :param det_prob_threshold:
@@ -85,33 +77,9 @@ class RecognitionService(Service):
         )
         return self.recognize_face_from_images.execute(request)
 
-    def get_list_of_subjects(self) -> dict:
+    def get_face_collection(self) -> FaceCollection:
         """
-
+        Get face collection
         :return:
         """
-        return self.list_of_all_saved_subjects.execute()
-
-    def delete_all_examples_of_subject(self, subject: str) -> dict:
-        """
-
-        :param subject:
-        :return:
-        """
-        request = DeleteAllExamplesOfSubjectByName.Request(
-            api_key=self.api_key,
-            subject=subject
-        )
-        return self.delete_all_examples_of_subject_by_name.execute(request)
-
-    def delete_example(self, image_id: str) -> dict:
-        """
-
-        :param image_id:
-        :return:
-        """
-        request = DeleteExampleById.Request(
-            api_key=self.api_key,
-            image_id=image_id
-        )
-        return self.delete_all_examples_by_id.execute(request)
+        return self.face_collection

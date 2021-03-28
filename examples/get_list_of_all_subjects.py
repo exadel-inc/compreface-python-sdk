@@ -2,6 +2,7 @@
 
 from compreface import CompreFace
 from compreface.service import RecognitionService
+from compreface.collections import FaceColliction
 
 
 DOMAIN: str = 'http://localhost'
@@ -13,4 +14,6 @@ compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
 recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
 
-print(recognition.get_list_of_subjects())
+face_collection: FaceColliction = recognition.get_face_collection()
+
+print(face_collection.list())

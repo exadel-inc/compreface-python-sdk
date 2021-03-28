@@ -15,4 +15,4 @@ recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
 
 image_path: str = '/home/aliubymov/A-OZSXlgs3c.jpg'
 
-print(recognition.recognize_face(image_path))
+print(recognition.recognize(image_path))
