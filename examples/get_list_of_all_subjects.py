@@ -2,18 +2,15 @@
 
 from compreface import CompreFace
 from compreface.service import RecognitionService
-from compreface.collections import FaceColliction
-
-
-DOMAIN: str = 'http://localhost'
-PORT: str = '8000'
-API_KEY: str = '7dacfc8e-1bb1-4fcf-a9b1-76e4d9d89855'
+from compreface.collections import FaceCollection
+from compreface.config.compreface_server_config import DOMAIN, PORT, RECOGNITION_API_KEY
 
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
+recognition: RecognitionService = compre_face.init_face_recognition(
+    RECOGNITION_API_KEY)
 
-face_collection: FaceColliction = recognition.get_face_collection()
+face_collection: FaceCollection = recognition.get_face_collection()
 
 print(face_collection.list())

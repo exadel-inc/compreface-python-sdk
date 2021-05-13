@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
 
+from compreface.collections.face_collections import FaceCollection
 from compreface import CompreFace
 from compreface.service import RecognitionService
-
-
-DOMAIN: str = 'http://localhost'
-PORT: str = '8000'
-API_KEY: str = '7dacfc8e-1bb1-4fcf-a9b1-76e4d9d89855'
+from compreface.config.compreface_server_config import DOMAIN, PORT, RECOGNITION_API_KEY
 
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-verification: RecognitionService = compre_face.init_face_recognition(API_KEY)
+recognition: RecognitionService = compre_face.init_face_recognition(
+    RECOGNITION_API_KEY)
 
-image_path: str = '/home/aliubymov/A-OZSXlgs3c.jpg'
-image_id: str = '3aff54a4-862b-48e5-a5e1-10056cc893da'
+image_path: str = 'examples/common/di_kaprio.jpg'
 
-print(verification.verify(image_path, image_id))
+face_collection: FaceCollection = recognition.get_face_collection()
+
+face: dict = next(item for item in face_collection.list().get('faces') if item['subject'] ==
+                  'Leonardo Wilhelm DiCaprio')
+
+image_id = face.get('image_id')
+
+print(face_collection.verify(image_path, image_id))
