@@ -3,8 +3,10 @@
 from compreface import CompreFace
 from compreface.service import RecognitionService
 from compreface.collections import FaceCollection
-from compreface.config.compreface_server_config import DOMAIN, PORT, RECOGNITION_API_KEY
 
+DOMAIN: str = 'http://localhost'
+PORT: str = '8000'
+RECOGNITION_API_KEY: str = '9916f5d1-216f-4049-9e06-51c140bfa898'
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
