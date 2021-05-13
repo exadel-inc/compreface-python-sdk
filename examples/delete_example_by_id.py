@@ -2,19 +2,24 @@
 
 from compreface import CompreFace
 from compreface.service import RecognitionService
-from compreface.collections import FaceColliction
-
+from compreface.collections import FaceCollection
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-API_KEY: str = '7dacfc8e-1bb1-4fcf-a9b1-76e4d9d89855'
+RECOGNITION_API_KEY: str = '9916f5d1-216f-4049-9e06-51c140bfa898'
 
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
-image_id: str = '3aff54a4-862b-48e5-a5e1-10056cc893da'
+recognition: RecognitionService = compre_face.init_face_recognition(
+    RECOGNITION_API_KEY)
 
-face_collection: FaceColliction = recognition.get_face_collection()
+face_collection: FaceCollection = recognition.get_face_collection()
 
-print(face_collection.delete(image_id))
+faces: list = face_collection.list().get('faces')
+
+if(len(faces) != 0):
+    last_face: dict = faces[len(faces) - 1]
+    print(face_collection.delete(last_face.get('image_id')))
+else:
+    print('No subject found')

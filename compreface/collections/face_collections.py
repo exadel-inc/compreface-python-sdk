@@ -1,4 +1,5 @@
 
+from compreface.use_cases.verify_face_from_image import VerifyFaceFromImage
 from ..use_cases import (
     AddExampleOfSubject,
     ListOfAllSavedSubjects,
@@ -8,10 +9,10 @@ from ..use_cases import (
 
 
 class FaceCollection:
-
     def __init__(self, api_key: str, domain: str, port: str):
         """Init service with define API Key"""
         self.available_services = []
+        self.api_key = api_key
         self.add_example: AddExampleOfSubject = AddExampleOfSubject(
             domain=domain,
             port=port,
@@ -28,6 +29,11 @@ class FaceCollection:
             api_key=api_key
         )
         self.delete_all_examples_by_id: DeleteExampleById = DeleteExampleById(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+        self.verify_face_from_image: VerifyFaceFromImage = VerifyFaceFromImage(
             domain=domain,
             port=port,
             api_key=api_key
@@ -77,3 +83,17 @@ class FaceCollection:
             image_id=image_id
         )
         return self.delete_all_examples_by_id.execute(request)
+
+    def verify(self, image_path: str, image_id: str) -> dict:
+        """
+        Verify image
+        :param image_path:
+        :param image_id:
+        :return:
+        """
+        request = VerifyFaceFromImage.Request(
+            api_key=self.api_key,
+            image_path=image_path,
+            image_id=image_id
+        )
+        return self.verify_face_from_image.execute(request)

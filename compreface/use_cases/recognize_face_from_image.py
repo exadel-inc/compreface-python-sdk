@@ -10,9 +10,6 @@ class RecognizeFaceFromImage:
     class Request:
         api_key: str
         image_path: str
-        limit: float = 0
-        det_prob_threshold: float = 0.8
-        prediction_count: int = 1
 
     def __init__(self, domain: str, port: str, api_key: str):
         self.recognize_face_from_image = RecognizeFaceFromImageClient(
@@ -22,8 +19,5 @@ class RecognizeFaceFromImage:
         )
 
     def execute(self, request: Request) -> dict:
-        result: dict = self.recognize_face_from_image.post(request.image_path,
-                                                           request.limit,
-                                                           request.det_prob_threshold,
-                                                           request.prediction_count)
+        result: dict = self.recognize_face_from_image.post(request.image_path)
         return result

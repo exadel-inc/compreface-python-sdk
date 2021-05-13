@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from compreface.config.api_list import RECOGNIZE_API
 import os
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
@@ -11,20 +12,15 @@ class RecognizeFaceFromImageClient(ClientRequest):
 
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
-        self.client_url: str = '/api/v1/faces/recognize'
+        self.client_url: str = RECOGNIZE_API
         self.api_key: str = api_key
         self.url: str = domain + ':' + port + self.client_url
 
     def get(self):
         pass
 
-    def post(self, image_path: str = '',
-             limit: float = 0,
-             det_prob_threshold: float = 0,
-             prediction_count: int = 0):
-        url: str = self.url + '?limit=' + str(limit) + '&prediction_count=' + str(prediction_count) \
-                   + '&det_prob_threshold=' + \
-                   str(det_prob_threshold)
+    def post(self, image_path: str = ''):
+        url: str = self.url
         name_img: str = os.path.basename(image_path)
         m = MultipartEncoder(
             fields={'file': (name_img, open(image_path, 'rb'))}

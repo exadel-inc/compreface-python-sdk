@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from compreface.config.api_list import RECOGNIZE_CRUD_API
 import os
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
@@ -11,7 +12,7 @@ class AddExampleOfSubjectClient(ClientRequest):
 
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
-        self.client_url: str = '/api/v1/faces'
+        self.client_url: str = RECOGNIZE_CRUD_API
         self.api_key: str = api_key
         self.url: str = domain + ':' + port + self.client_url
 

@@ -11,8 +11,6 @@ class VerifyFaceFromImage:
         api_key: str
         image_path: str
         image_id: str
-        limit: float = 0
-        det_prob_threshold: float = 0.8
 
     def __init__(self, domain: str, port: str, api_key: str):
         self.verify_face_from_image = VerifyFaceFromImageClient(
@@ -23,7 +21,5 @@ class VerifyFaceFromImage:
 
     def execute(self, request: Request):
         result: dict = self.verify_face_from_image.post(request.image_path,
-                                                        request.image_id,
-                                                        request.limit,
-                                                        request.det_prob_threshold)
+                                                        request.image_id)
         return result

@@ -3,16 +3,16 @@
 from compreface import CompreFace
 from compreface.service import RecognitionService
 
-
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-API_KEY: str = '7dacfc8e-1bb1-4fcf-a9b1-76e4d9d89855'
+RECOGNITION_API_KEY: str = '9916f5d1-216f-4049-9e06-51c140bfa898'
 
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
+recognition: RecognitionService = compre_face.init_face_recognition(
+    RECOGNITION_API_KEY)
 
-image_path: str = '/home/aliubymov/A-OZSXlgs3c.jpg'
+image_path: str = 'examples/common/di_kaprio.jpg'
 
 print(recognition.recognize(image_path))

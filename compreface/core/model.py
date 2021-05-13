@@ -54,8 +54,8 @@ class CompreFace(object):
         :return:
         """
         self.verification = VerificationService(api_key=api_key,
-                                              domain=self.domain,
-                                              port=self.port)
+                                                domain=self.domain,
+                                                port=self.port)
         return self.verification
 
     def init_face_detection(self, api_key: str) -> DetectionService:

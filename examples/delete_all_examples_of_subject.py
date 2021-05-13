@@ -2,19 +2,19 @@
 
 from compreface import CompreFace
 from compreface.service import RecognitionService
-from compreface.collections import FaceColliction
-
+from compreface.collections import FaceCollection
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-API_KEY: str = '7dacfc8e-1bb1-4fcf-a9b1-76e4d9d89855'
+RECOGNITION_API_KEY: str = '9916f5d1-216f-4049-9e06-51c140bfa898'
 
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
-subject: str = 'test'
+recognition: RecognitionService = compre_face.init_face_recognition(
+    RECOGNITION_API_KEY)
+subject: str = 'Leonardo Wilhelm DiCaprio'
 
-face_collection: FaceColliction = recognition.get_face_collection()
+face_collection: FaceCollection = recognition.get_face_collection()
 
-print(recognition.delete_all(subject))
+print(face_collection.delete_all(subject))
