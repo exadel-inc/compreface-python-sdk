@@ -21,8 +21,10 @@ class AddExampleOfSubjectClient(ClientRequest):
         result = requests.get(url, headers={'x-api-key': self.api_key})
         return result.json()
 
-    def post(self, image_path: str = '', subject: str = '') -> dict:
+    def post(self, image_path: str = '', subject: str = '', options: dict = {}) -> dict:
         url: str = self.url + '?subject=' + subject
+        for key in options.keys():
+            url += '&' + key + "=" + str(options[key])
         name_img: str = os.path.basename(image_path)
         m = MultipartEncoder(
             fields={'file': (name_img, open(image_path, 'rb'))}

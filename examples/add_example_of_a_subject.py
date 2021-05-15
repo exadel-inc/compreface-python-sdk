@@ -18,4 +18,6 @@ face_collection: FaceCollection = recognition.get_face_collection()
 image_path: str = 'examples/common/di_kaprio.jpg'
 subject: str = 'Leonardo Wilhelm DiCaprio'
 
-print(face_collection.add(image_path, subject))
+print(face_collection.add(image_path, subject, {
+    "det_prob_threshold": 0.8
+}))

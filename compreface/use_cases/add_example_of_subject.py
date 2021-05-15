@@ -19,6 +19,7 @@ class AddExampleOfSubject:
             port=port
         )
 
-    def execute(self, request: Request) -> dict:
-        result: dict = self.add_example_of_subject.post(request.image_path, request.subject)
+    def execute(self, request: Request, options: dict = {}) -> dict:
+        result: dict = self.add_example_of_subject.post(
+            request.image_path, request.subject, options)
         return result

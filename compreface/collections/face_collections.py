@@ -46,7 +46,7 @@ class FaceCollection:
             api_key=api_key
         )
 
-    def add(self, image_path: str, subject: str) -> dict:
+    def add(self, image_path: str, subject: str, options: dict = {}) -> dict:
         """
         Add example to collection
         :param image_path:
@@ -58,7 +58,7 @@ class FaceCollection:
             image_path=image_path,
             subject=subject
         )
-        return self.add_example.execute(request)
+        return self.add_example.execute(request, options)
 
     def list(self) -> dict:
         """
@@ -91,7 +91,7 @@ class FaceCollection:
         )
         return self.delete_all_examples_by_id.execute(request)
 
-    def verify(self, image_path: str, image_id: str) -> dict:
+    def verify(self, image_path: str, image_id: str, options: dict = {}) -> dict:
         """
         Verify image
         :param image_path:
@@ -103,9 +103,9 @@ class FaceCollection:
             image_path=image_path,
             image_id=image_id
         )
-        return self.verify_face_from_image.execute(request)
+        return self.verify_face_from_image.execute(request, options)
 
-    def detect(self, image_path: str) -> dict:
+    def detect(self, image_path: str, options: dict = {}) -> dict:
         """
         Detect face in image
         :param image_path:
@@ -115,4 +115,4 @@ class FaceCollection:
             api_key=self.api_key,
             image_path=image_path
         )
-        return self.detect_face_from_image.execute(request)
+        return self.detect_face_from_image.execute(request, options)

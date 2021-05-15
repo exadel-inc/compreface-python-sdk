@@ -20,8 +20,11 @@ class VerifyFaceFromImageClient(ClientRequest):
 
     def post(self,
              image_path: str = '',
-             image_id: str = ''):
-        url: str = self.url + '/' + image_id + '/verify'
+             image_id: str = '',
+             options: dict = {}):
+        url: str = self.url + '/' + image_id + '/verify?'
+        for key in options.keys():
+            url += '&' + key + "=" + str(options[key])
         name_img: str = os.path.basename(image_path)
         m = MultipartEncoder(
             fields={'file': (name_img, open(image_path, 'rb'))}

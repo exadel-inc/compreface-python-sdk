@@ -19,7 +19,7 @@ class VerifyFaceFromImage:
             port=port
         )
 
-    def execute(self, request: Request):
+    def execute(self, request: Request, options: dict = {}):
         result: dict = self.verify_face_from_image.post(request.image_path,
-                                                        request.image_id)
+                                                        request.image_id, options)
         return result

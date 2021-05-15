@@ -34,7 +34,7 @@ class RecognitionService(Service):
         """
         return self.available_services
 
-    def recognize(self, image_path: str) -> dict:
+    def recognize(self, image_path: str, options: dict = {}) -> dict:
         """
         Recognize image
         :param image_path:
@@ -44,7 +44,7 @@ class RecognitionService(Service):
             api_key=self.api_key,
             image_path=image_path
         )
-        return self.recognize_face_from_images.execute(request)
+        return self.recognize_face_from_images.execute(request, options)
 
     def get_face_collection(self) -> FaceCollection:
         """

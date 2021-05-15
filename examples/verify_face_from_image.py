@@ -22,4 +22,9 @@ face: dict = next(item for item in face_collection.list().get('faces') if item['
 
 image_id = face.get('image_id')
 
-print(face_collection.verify(image_path, image_id))
+print(face_collection.verify(image_path, image_id, {
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "prediction_count": 1,
+    "status": "true"
+}))

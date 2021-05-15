@@ -15,9 +15,11 @@ class DetectFaceFromImageClient(ClientRequest):
     def get(self):
         pass
 
-    def post(self, image_path: str = ''):
-        url: str = self.url
+    def post(self, image_path: str = '', options: dict = {}):
+        url: str = self.url + '?'
         name_img: str = os.path.basename(image_path)
+        for key in options.keys():
+            url += '&' + key + "=" + str(options[key])
         m = MultipartEncoder(
             fields={'file': (name_img, open(image_path, 'rb'))}
         )

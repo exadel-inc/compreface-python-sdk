@@ -16,6 +16,7 @@ class DetectFaceFromImage:
             port=port
         )
 
-    def execute(self, request: Request) -> dict:
-        result: dict = self.detect_face_from_image.post(request.image_path)
+    def execute(self, request: Request, options: dict = {}) -> dict:
+        result: dict = self.detect_face_from_image.post(
+            request.image_path, options)
         return result
