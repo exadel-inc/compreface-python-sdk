@@ -11,7 +11,6 @@ url: str = DOMAIN + ":" + PORT + RECOGNIZE_CRUD_API + '/' + IMAGE_ID + '/verify'
 
 @httpretty.activate(verbose=True, allow_net_connect=False)
 def test_post():
-
     httpretty.register_uri(
         httpretty.POST,
         url,
