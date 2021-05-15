@@ -6,3 +6,4 @@ from .delete_example_by_id import DeleteExampleById
 from .list_of_all_saved_subjects import ListOfAllSavedSubjects
 from .recognize_face_from_image import RecognizeFaceFromImage
 from .verify_face_from_image import VerifyFaceFromImage
+from .detect_face_from_image import DetectFaceFromImage

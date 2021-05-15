@@ -1,10 +1,12 @@
 
+from requests.api import request
 from compreface.use_cases.verify_face_from_image import VerifyFaceFromImage
 from ..use_cases import (
     AddExampleOfSubject,
     ListOfAllSavedSubjects,
     DeleteAllExamplesOfSubjectByName,
-    DeleteExampleById
+    DeleteExampleById,
+    DetectFaceFromImage
 )
 
 
@@ -34,6 +36,11 @@ class FaceCollection:
             api_key=api_key
         )
         self.verify_face_from_image: VerifyFaceFromImage = VerifyFaceFromImage(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+        self.detect_face_from_image: DetectFaceFromImage = DetectFaceFromImage(
             domain=domain,
             port=port,
             api_key=api_key
@@ -97,3 +104,15 @@ class FaceCollection:
             image_id=image_id
         )
         return self.verify_face_from_image.execute(request)
+
+    def detect(self, image_path: str) -> dict:
+        """
+        Detect face in image
+        :param image_path:
+        :return:
+        """
+        request = DetectFaceFromImage.Request(
+            api_key=self.api_key,
+            image_path=image_path
+        )
+        return self.detect_face_from_image.execute(request)
