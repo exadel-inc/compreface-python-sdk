@@ -1,6 +1,6 @@
-from compreface.common.typed_dict import AllOptionsDict, check_fields_by_name
 import os
 import requests
+from compreface.common.typed_dict import AllOptionsDict, check_fields_by_name
 from ..common import ClientRequest
 from compreface.config.api_list import DETECTION_API
 from requests_toolbelt.multipart.encoder import MultipartEncoder

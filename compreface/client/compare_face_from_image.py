@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
-from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
-from compreface.config.api_list import RECOGNIZE_CRUD_API
 import os
 import requests
+from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
+from compreface.config.api_list import RECOGNIZE_CRUD_API
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from ..common import ClientRequest
 
