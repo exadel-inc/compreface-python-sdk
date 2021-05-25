@@ -220,12 +220,12 @@ Response body on success:
 | image_id | UUID   | UUID of the removed face                                          |
 | subject  | string | <subject> of the person, whose picture was saved for this api key |
 
-### Verify Faces from a Given Image
+### Compare Faces from a Given Image
 
 To compare faces from the uploaded images with the face in saved image ID:
 
 ```python
-FaceCollection.verify(image_id, file, options)
+FaceCollection.compare(image_id, file, options)
 ```
 
 | Element            | Description | Type    | Required | Notes                                                                                                                                                 |
@@ -271,6 +271,10 @@ Response body on success:
 
 To detect faces from the uploaded image:
 
+```python
+FaceCollection.detect(file, options)
+```
+
 | Element            | Description | Type    | Required | Notes                                                                                                                                          |
 | ------------------ | ----------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | Content-Type       | header      | string  | required | multipart/form-data                                                                                                                            |
@@ -312,7 +316,88 @@ Response body on success:
     "calculator" : "facenet.Calculator"
   }
 }
-```                                    |
+```
+
+## Face Verification Service
+
+To compare faces from given two images:
+
+```python
+FaceCollection.verify(source_image, target_image, options)
+```
+
+| Element            | Description | Type    | Required | Notes                                                        |
+| ------------------ | ----------- | ------- | -------- | ------------------------------------------------------------ |
+| Content-Type       | header      | string  | required | multipart/form-data                                          |
+| x-api-key          | header      | string  | required | api key of the Face verification service, created by the user                    |
+| image_id           | variable    | UUID    | required | UUID of the verifying face                                   |
+| source_image       | body        | image   | required | file to be verified. Allowed image formats: jpeg, jpg, ico, png, bmp, gif, tif, tiff, webp. Max size is 5Mb |
+| target_image       | body        | image   | required | reference file to check the source file. Allowed image formats: jpeg, jpg, ico, png, bmp, gif, tif, tiff, webp. Max size is 5Mb |
+| limit              | param       | integer | optional | maximum number of faces on the target image to be recognized. It recognizes the biggest faces first. Value of 0 represents no limit. Default value: 0 |
+| det_prob_threshold | param       | string  | optional | minimum required confidence that a recognized face is actually a face. Value is between 0.0 and 1.0. |
+| face_plugins       | param       | string  | optional | comma-separated slugs of face plugins. If empty, no additional information is returned. |
+| status             | param       | boolean | optional | if true includes system information like execution_time and plugin_version fields. Default value is false |
+
+Response body on success:
+```json
+{
+  "source_image_face" : {
+    "age" : [ 25, 32 ],
+    "gender" : "female",
+    "embedding" : [ -0.0010271212086081505, "...", -0.008746841922402382 ],
+    "box" : {
+      "probability" : 0.9997453093528748,
+      "x_max" : 205,
+      "y_max" : 167,
+      "x_min" : 48,
+      "y_min" : 0
+    },
+    "landmarks" : [ [ 92, 44 ], [ 130, 68 ], [ 71, 76 ], [ 60, 104 ], [ 95, 125 ] ],
+    "execution_time" : {|
+  "face_matches": [
+    {
+      "age" : [ 25, 32 ],
+      "gender" : "female",
+      "embedding" : [ -0.049007344990968704, "...", -0.01753818802535534 ],
+      "box" : {
+        "probability" : 0.99975,
+        "x_max" : 308,
+        "y_max" : 180,
+        "x_min" : 235,
+        "y_min" : 98
+      },
+      "landmarks" : [ [ 260, 129 ], [ 273, 127 ], [ 258, 136 ], [ 257, 150 ], [ 269, 148 ] ],
+      "similarity" : 0.97858,
+      "execution_time" : {
+        "age" : 59.0,
+        "gender" : 30.0,
+        "detector" : 177.0,
+        "calculator" : 70.0
+      }
+    }],
+  "plugins_versions" : {
+    "age" : "agegender.AgeDetector",
+    "gender" : "agegender.GenderDetector",
+    "detector" : "facenet.FaceDetector",
+    "calculator" : "facenet.Calculator"
+  }
+}
+```
+
+| Element                        | Type    | Description                                                  |
+| ------------------------------ | ------- | ------------------------------------------------------------ |
+| source_image_face              | object  | additional info about source image face |
+| face_matches                   | array   | result of face verification |
+| age                            | array   | detected age range.  |
+| gender                         | string  | detected gender. Return only if         |
+| embedding                      | array   | face embeddings. Return only if       |
+| box                            | object  | list of parameters of the bounding box for this face         |
+| probability                    | float   | probability that a found face is actually a face             |
+| x_max, y_max, x_min, y_min     | integer | coordinates of the frame containing the face                 |
+| landmarks                      | array   | list of the coordinates of the frame containing the face-landmarks. Return only if      |
+| similarity                     | float   | similarity between this face and the face on the source image               |
+| execution_time                 | object  | execution time of all plugins                       |
+| plugins_versions               | object  | contains information about plugin versions                       |
 
 ## Usage
 
