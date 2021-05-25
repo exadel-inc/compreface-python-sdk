@@ -1,0 +1,2 @@
+class IncorrectFieldException(BaseException):
+    pass

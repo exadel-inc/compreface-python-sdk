@@ -1,30 +1,23 @@
-# -*- coding: utf-8 -*-
-
-from compreface.collections.face_collections import FaceCollection
 from compreface import CompreFace
-from compreface.service import RecognitionService
+from compreface.service import VerificationService
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-RECOGNITION_API_KEY: str = '9916f5d1-216f-4049-9e06-51c140bfa898'
+VERIFICATION_API_KEY: str = '3c6171a4-e115-41f0-afda-4032bda4bfe9'
+
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-recognition: RecognitionService = compre_face.init_face_recognition(
-    RECOGNITION_API_KEY)
+verify: VerificationService = compre_face.init_face_verification(
+    VERIFICATION_API_KEY)
 
 image_path: str = 'examples/common/di_kaprio.jpg'
 
-face_collection: FaceCollection = recognition.get_face_collection()
 
-face: dict = next(item for item in face_collection.list().get('faces') if item['subject'] ==
-                  'Leonardo Wilhelm DiCaprio')
-
-image_id = face.get('image_id')
-
-print(face_collection.verify(image_path, image_id, {
+print(verify.verify(image_path, image_path, {
     "limit": 0,
     "det_prob_threshold": 0.8,
     "prediction_count": 1,
+    "face_plugins": "age,gender",
     "status": "true"
 }))

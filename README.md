@@ -27,7 +27,7 @@ Before using our SDK make sure you have installed CompreFace and Python on your 
 This creates an example of the subject by saving images. You can add as many images as you want to train the system.
 
 ```python
-FaceCollection.add(file, subject)
+FaceCollection.add(file, subject, options)
 ```
 
 | Element            | Description | Type   | Required | Notes                                                                                                |
@@ -146,7 +146,7 @@ FaceCollection.list()
 
 Response body on success:
 
-```json
+```
 {
   "faces": [
     {
@@ -178,7 +178,7 @@ FaceCollection.delete_all(subject)
 
 Response body on success:
 
-```json
+```
 [
   {
     "image_id": <image_id>,
@@ -208,7 +208,7 @@ FaceCollection.delete(image_id)
 
 Response body on success:
 
-```json
+```
 {
   "image_id": <image_id>,
   "subject": <subject>
@@ -241,7 +241,7 @@ FaceCollection.verify(image_id, file, options)
 
 Response body on success:
 
-```json
+```
 {
   "result": [
     {
@@ -481,7 +481,7 @@ else:
 
 ```
 
-### Example Verify Faces from a Given Image
+### Example Compare Faces from a Given Image
 
 To compare faces from the uploaded images with the face in saved image ID:
 

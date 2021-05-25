@@ -8,6 +8,10 @@ from ..common import ClientRequest
 
 class DeleteExampleByIdClient(ClientRequest):
 
+    """
+        Delete example by id from image_id.
+    """
+
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
         self.client_url: str = RECOGNIZE_CRUD_API
@@ -22,6 +26,14 @@ class DeleteExampleByIdClient(ClientRequest):
 
     def put(self):
         pass
+
+    """ 
+        DELETE request to CompreFace server. Delete example by id from image_id.
+        
+        :param image_id:
+        
+        :return: json from server.
+    """
 
     def delete(self, image_id: str = ''):
         url: str = self.url + '/' + image_id

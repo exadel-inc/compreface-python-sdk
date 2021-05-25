@@ -4,3 +4,5 @@ RECOGNIZE_API: str = RECOGNITION_ROOT_API + '/recognize'
 RECOGNIZE_CRUD_API: str = RECOGNITION_ROOT_API + '/faces'
 
 DETECTION_API: str = '/api/v1/detection/detect'
+
+VERIFICATION_API: str = '/api/v1/verification'

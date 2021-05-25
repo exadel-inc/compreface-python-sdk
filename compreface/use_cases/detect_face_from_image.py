@@ -1,3 +1,4 @@
+from compreface.common.typed_dict import AllOptionsDict
 from dataclasses import dataclass
 from ..client import DetectFaceFromImageClient
 
@@ -16,7 +17,7 @@ class DetectFaceFromImage:
             port=port
         )
 
-    def execute(self, request: Request, options: dict = {}) -> dict:
+    def execute(self, request: Request, options: AllOptionsDict = {}) -> dict:
         result: dict = self.detect_face_from_image.post(
             request.image_path, options)
         return result
