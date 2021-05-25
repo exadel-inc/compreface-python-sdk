@@ -1,3 +1,12 @@
 {
-   "signedContributors": []
+  "signedContributors": [
+    {
+      "name": "pospielov",
+      "id": 3736126,
+      "comment_id": 847898288,
+      "created_at": "2021-05-25T14:03:52Z",
+      "repoId": 341595166,
+      "pullRequestNo": 6
+    }
+  ]
 }
