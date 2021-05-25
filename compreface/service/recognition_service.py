@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from compreface.common.typed_dict import ExpandedOptionsDict
 from typing import List
 
 from ..common import Service
@@ -34,17 +35,18 @@ class RecognitionService(Service):
         """
         return self.available_services
 
-    def recognize(self, image_path: str) -> dict:
+    def recognize(self, image_path: str, options: ExpandedOptionsDict = {}) -> dict:
         """
         Recognize image
         :param image_path:
+        :param options:
         :return:
         """
         request = RecognizeFaceFromImage.Request(
             api_key=self.api_key,
             image_path=image_path
         )
-        return self.recognize_face_from_images.execute(request)
+        return self.recognize_face_from_images.execute(request, options)
 
     def get_face_collection(self) -> FaceCollection:
         """

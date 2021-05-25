@@ -64,5 +64,6 @@ class CompreFace(object):
         :param api_key:
         :return:
         """
-        self.detection = DetectionService(api_key=api_key)
+        self.detection = DetectionService(api_key=api_key, domain=self.domain,
+                                          port=self.port)
         return self.detection

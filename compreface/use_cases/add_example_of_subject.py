@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from compreface.common.typed_dict import DetProbOptionsDict
 from dataclasses import dataclass
 from ..client import AddExampleOfSubjectClient
 
@@ -19,6 +20,7 @@ class AddExampleOfSubject:
             port=port
         )
 
-    def execute(self, request: Request) -> dict:
-        result: dict = self.add_example_of_subject.post(request.image_path, request.subject)
+    def execute(self, request: Request, options: DetProbOptionsDict = {}) -> dict:
+        result: dict = self.add_example_of_subject.post(
+            request.image_path, request.subject, options)
         return result

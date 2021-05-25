@@ -15,4 +15,9 @@ recognition: RecognitionService = compre_face.init_face_recognition(
 
 image_path: str = 'examples/common/di_kaprio.jpg'
 
-print(recognition.recognize(image_path))
+print(recognition.recognize(image_path, {
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "prediction_count": 1,
+    "status": "true"
+}))

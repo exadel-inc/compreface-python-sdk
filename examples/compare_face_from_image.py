@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from compreface.collections.face_collections import FaceCollection
 from compreface import CompreFace
 from compreface.service import RecognitionService
-from compreface.collections import FaceCollection
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
@@ -13,11 +13,18 @@ compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 recognition: RecognitionService = compre_face.init_face_recognition(
     RECOGNITION_API_KEY)
 
+image_path: str = 'examples/common/di_kaprio.jpg'
+
 face_collection: FaceCollection = recognition.get_face_collection()
 
-image_path: str = 'examples/common/di_kaprio.jpg'
-subject: str = 'Leonardo Wilhelm DiCaprio'
+face: dict = next(item for item in face_collection.list().get('faces') if item['subject'] ==
+                  'Leonardo Wilhelm DiCaprio')
 
-print(face_collection.add(image_path, subject, {
-    "det_prob_threshold": 0.8
+image_id = face.get('image_id')
+
+print(face_collection.compare(image_path, image_id, {
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "prediction_count": 1,
+    "status": "true"
 }))

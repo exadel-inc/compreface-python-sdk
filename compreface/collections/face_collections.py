@@ -1,10 +1,14 @@
 
-from compreface.use_cases.verify_face_from_image import VerifyFaceFromImage
+from compreface.use_cases.verifiy_face_from_images import VerifyFaceFromImage
+from compreface.common.typed_dict import AllOptionsDict, ExpandedOptionsDict, DetProbOptionsDict
+from requests.api import request
 from ..use_cases import (
     AddExampleOfSubject,
     ListOfAllSavedSubjects,
     DeleteAllExamplesOfSubjectByName,
-    DeleteExampleById
+    DeleteExampleById,
+    DetectFaceFromImage,
+    CompareFaceFromImage
 )
 
 
@@ -33,13 +37,23 @@ class FaceCollection:
             port=port,
             api_key=api_key
         )
+        self.compare_face_from_image: CompareFaceFromImage = CompareFaceFromImage(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+        self.detect_face_from_image: DetectFaceFromImage = DetectFaceFromImage(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
         self.verify_face_from_image: VerifyFaceFromImage = VerifyFaceFromImage(
             domain=domain,
             port=port,
             api_key=api_key
         )
 
-    def add(self, image_path: str, subject: str) -> dict:
+    def add(self, image_path: str, subject: str, options: DetProbOptionsDict = {}) -> dict:
         """
         Add example to collection
         :param image_path:
@@ -51,7 +65,7 @@ class FaceCollection:
             image_path=image_path,
             subject=subject
         )
-        return self.add_example.execute(request)
+        return self.add_example.execute(request, options)
 
     def list(self) -> dict:
         """
@@ -84,16 +98,42 @@ class FaceCollection:
         )
         return self.delete_all_examples_by_id.execute(request)
 
-    def verify(self, image_path: str, image_id: str) -> dict:
+    def compare(self, image_path: str, image_id: str, options: ExpandedOptionsDict = {}) -> dict:
+        """
+        Compare image
+        :param image_path:
+        :param image_id:
+        :return:
+        """
+        request = CompareFaceFromImage.Request(
+            api_key=self.api_key,
+            image_path=image_path,
+            image_id=image_id
+        )
+        return self.compare_face_from_image.execute(request, options)
+
+    def detect(self, image_path: str, options: AllOptionsDict = {}) -> dict:
+        """
+        Detect face in image
+        :param image_path:
+        :return:
+        """
+        request = DetectFaceFromImage.Request(
+            api_key=self.api_key,
+            image_path=image_path
+        )
+        return self.detect_face_from_image.execute(request, options)
+
+    def verify(self, source_image_path: str = '', target_image_path: str = '', options: AllOptionsDict = {}) -> dict:
         """
         Verify image
-        :param image_path:
+        :param source_image_path:
         :param image_id:
         :return:
         """
         request = VerifyFaceFromImage.Request(
             api_key=self.api_key,
-            image_path=image_path,
-            image_id=image_id
+            source_image_path=source_image_path,
+            target_image_path=target_image_path
         )
-        return self.verify_face_from_image.execute(request)
+        return self.verify_face_from_image.execute(request, options)

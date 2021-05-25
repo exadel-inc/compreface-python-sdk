@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from compreface.common.typed_dict import ExpandedOptionsDict
 from dataclasses import dataclass
 from ..client import RecognizeFaceFromImageClient
 
@@ -18,6 +19,7 @@ class RecognizeFaceFromImage:
             port=port
         )
 
-    def execute(self, request: Request) -> dict:
-        result: dict = self.recognize_face_from_image.post(request.image_path)
+    def execute(self, request: Request, options: ExpandedOptionsDict = {}) -> dict:
+        result: dict = self.recognize_face_from_image.post(
+            request.image_path, options)
         return result
