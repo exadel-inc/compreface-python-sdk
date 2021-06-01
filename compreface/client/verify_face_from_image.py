@@ -1,3 +1,20 @@
+"""
+    Copyright(c) 2021 the original author or authors
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https: // www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing
+    permissions and limitations under the License.
+ """
+
+from compreface.common.multipart_constructor import multipart_constructor_with_two_images
 import requests
 from compreface.config.api_list import VERIFICATION_API
 import os
@@ -34,13 +51,11 @@ class VerifyFaceFromImageClient(ClientRequest):
     """
 
     def post(self,
-             source_image_path: str = '',
-             target_image_path: str = '',
+             source_image: str = '' or bytes,
+             target_image: str = '' or bytes,
              options: AllOptionsDict = {}) -> dict:
 
         url: str = self.url + '/verify?'
-        source_name_img: str = os.path.basename(source_image_path)
-        target_name_img: str = os.path.basename(target_image_path)
         # Validation loop and adding fields to the url.
         for key in options.keys():
             # Checks fields with necessary rules.
@@ -49,12 +64,7 @@ class VerifyFaceFromImageClient(ClientRequest):
             url += '&' + key + "=" + str(options[key])
 
         # Encoding image from path and encode in multipart for sending to the server.
-        m = MultipartEncoder(
-            fields={'source_image': (source_name_img, open(
-                source_image_path, 'rb')), 'target_image': (target_name_img, open(
-                    target_image_path, 'rb'))}
-
-        )
+        m = multipart_constructor_with_two_images(source_image, target_image)
 
         # Sending encode image for verify face.
         result = requests.post(url, data=m, headers={'Content-Type': m.content_type,

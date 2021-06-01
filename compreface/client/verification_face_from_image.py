@@ -1,4 +1,20 @@
-# -*- coding: utf-8 -*-
+"""
+    Copyright(c) 2021 the original author or authors
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https: // www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing
+    permissions and limitations under the License.
+ """
+
+from compreface.common.multipart_constructor import multipart_constructor
 import os
 import requests
 from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
@@ -7,7 +23,7 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 from ..common import ClientRequest
 
 
-class CompareFaceFromImageClient(ClientRequest):
+class VerificationFaceFromImageClient(ClientRequest):
     """
         Compare face in image. It uses image path for encode and send to CompreFace 
         server with validation by image id.
@@ -33,12 +49,12 @@ class CompareFaceFromImageClient(ClientRequest):
     """
 
     def post(self,
-             image_path: str = '',
+             image: str = '' or bytes,
              image_id: str = '',
              options: ExpandedOptionsDict = {}) -> dict:
 
         url: str = self.url + '/' + image_id + '/verify?'
-        name_img: str = os.path.basename(image_path)
+
         # Validation loop and adding fields to the url.
         for key in options.keys():
             # Checks fields with necessary rules.
@@ -47,9 +63,7 @@ class CompareFaceFromImageClient(ClientRequest):
             url += '&' + key + "=" + str(options[key])
 
         # Encoding image from path and encode in multipart for sending to the server.
-        m = MultipartEncoder(
-            fields={'file': (name_img, open(image_path, 'rb'))}
-        )
+        m = multipart_constructor(image)
 
         # Sending encode image for verify face.
         result = requests.post(url, data=m, headers={'Content-Type': m.content_type,

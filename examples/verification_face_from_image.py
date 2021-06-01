@@ -14,20 +14,31 @@
     permissions and limitations under the License.
  """
 
+from compreface.collections.face_collections import FaceCollection
 from compreface import CompreFace
 from compreface.service import RecognitionService
-from compreface.collections import FaceCollection
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-RECOGNITION_API_KEY: str = 'b97fbc0a-518a-4b1d-a93a-581b1d3814cc'
-
+RECOGNITION_API_KEY: str = '9916f5d1-216f-4049-9e06-51c140bfa898'
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
 recognition: RecognitionService = compre_face.init_face_recognition(
     RECOGNITION_API_KEY)
 
+image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
+
 face_collection: FaceCollection = recognition.get_face_collection()
 
-print(face_collection.list())
+face: dict = next(item for item in face_collection.list().get('faces') if item['subject'] ==
+                  'Jonathan Petit')
+
+image_id = face.get('image_id')
+
+print(face_collection.verify(image_path, image_id, {
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "prediction_count": 1,
+    "status": "true"
+}))

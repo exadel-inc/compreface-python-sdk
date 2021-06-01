@@ -1,3 +1,18 @@
+"""
+    Copyright(c) 2021 the original author or authors
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https: // www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing
+    permissions and limitations under the License.
+ """
 
 from compreface.use_cases.verifiy_face_from_images import VerifyFaceFromImage
 from compreface.common.typed_dict import AllOptionsDict, ExpandedOptionsDict, DetProbOptionsDict
@@ -8,7 +23,7 @@ from ..use_cases import (
     DeleteAllExamplesOfSubjectByName,
     DeleteExampleById,
     DetectFaceFromImage,
-    CompareFaceFromImage
+    VerificationFaceFromImage
 )
 
 
@@ -37,17 +52,7 @@ class FaceCollection:
             port=port,
             api_key=api_key
         )
-        self.compare_face_from_image: CompareFaceFromImage = CompareFaceFromImage(
-            domain=domain,
-            port=port,
-            api_key=api_key
-        )
-        self.detect_face_from_image: DetectFaceFromImage = DetectFaceFromImage(
-            domain=domain,
-            port=port,
-            api_key=api_key
-        )
-        self.verify_face_from_image: VerifyFaceFromImage = VerifyFaceFromImage(
+        self.verify_face_from_image: VerificationFaceFromImage = VerificationFaceFromImage(
             domain=domain,
             port=port,
             api_key=api_key
@@ -98,42 +103,16 @@ class FaceCollection:
         )
         return self.delete_all_examples_by_id.execute(request)
 
-    def compare(self, image_path: str, image_id: str, options: ExpandedOptionsDict = {}) -> dict:
+    def verify(self, image_path: str, image_id: str, options: ExpandedOptionsDict = {}) -> dict:
         """
         Compare image
         :param image_path:
         :param image_id:
         :return:
         """
-        request = CompareFaceFromImage.Request(
+        request = VerificationFaceFromImage.Request(
             api_key=self.api_key,
             image_path=image_path,
             image_id=image_id
-        )
-        return self.compare_face_from_image.execute(request, options)
-
-    def detect(self, image_path: str, options: AllOptionsDict = {}) -> dict:
-        """
-        Detect face in image
-        :param image_path:
-        :return:
-        """
-        request = DetectFaceFromImage.Request(
-            api_key=self.api_key,
-            image_path=image_path
-        )
-        return self.detect_face_from_image.execute(request, options)
-
-    def verify(self, source_image_path: str = '', target_image_path: str = '', options: AllOptionsDict = {}) -> dict:
-        """
-        Verify image
-        :param source_image_path:
-        :param image_id:
-        :return:
-        """
-        request = VerifyFaceFromImage.Request(
-            api_key=self.api_key,
-            source_image_path=source_image_path,
-            target_image_path=target_image_path
         )
         return self.verify_face_from_image.execute(request, options)

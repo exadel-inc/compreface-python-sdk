@@ -1,11 +1,24 @@
-# -*- coding: utf-8 -*-
+"""
+    Copyright(c) 2021 the original author or authors
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https: // www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing
+    permissions and limitations under the License.
+ """
+
+import requests
+from compreface.common.multipart_constructor import multipart_constructor
 from compreface.common.typed_dict import DetProbOptionsDict, check_fields_by_name
 from compreface.config.api_list import RECOGNIZE_CRUD_API
-import os
-import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-
 from ..common import ClientRequest
 
 
@@ -38,23 +51,15 @@ class AddExampleOfSubjectClient(ClientRequest):
         :return: json with this subject from server.
     """
 
-    def post(self, image_path: str = '', subject: str = '', options: DetProbOptionsDict = {}) -> dict:
+    def post(self, image: str = '' or bytes, subject: str = '', options: DetProbOptionsDict = {}) -> dict:
         url: str = self.url + '?subject=' + subject
-        name_img: str = os.path.basename(image_path)
-
         # Validation loop and adding fields to the url.
         for key in options.keys():
             # Checks fields with necessary rules.
             # key - key field by options.
             check_fields_by_name(key, options[key])
             url += '&' + key + "=" + str(options[key])
-
-        # Encoding image from path and encode in multipart for sending to the server.
-        m = MultipartEncoder(
-            fields={'file': (name_img, open(image_path, 'rb'))}
-        )
-
-        # Sending encode image for add subject.
+        m = multipart_constructor(image)
         result = requests.post(url, data=m, headers={'Content-Type': m.content_type,
                                                      'x-api-key': self.api_key})
         return result.json()
