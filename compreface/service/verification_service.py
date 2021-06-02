@@ -15,10 +15,8 @@
  """
 
 from compreface.use_cases.verifiy_face_from_images import VerifyFaceFromImage
-from requests.api import request
-from compreface.common.typed_dict import AllOptionsDict
+from compreface.common.typed_dict import ExpandedOptionsDict
 from compreface.client.verify_face_from_image import VerifyFaceFromImageClient
-from compreface.collections.face_collections import FaceCollection
 from typing import List
 
 from ..common import Service
@@ -44,7 +42,7 @@ class VerificationService(Service):
         """
         return self.available_services
 
-    def verify(self, source_image_path: str, target_image_path: str, options: AllOptionsDict) -> dict:
+    def verify(self, source_image_path: str, target_image_path: str, options: ExpandedOptionsDict) -> dict:
         """
         Verify face in images
         :param source_image_path:

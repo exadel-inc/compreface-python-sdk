@@ -20,7 +20,7 @@ from compreface.config.api_list import VERIFICATION_API
 import os
 
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-from compreface.common.typed_dict import AllOptionsDict, check_fields_by_name
+from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
 from compreface.common.client import ClientRequest
 
 
@@ -53,7 +53,7 @@ class VerifyFaceFromImageClient(ClientRequest):
     def post(self,
              source_image: str = '' or bytes,
              target_image: str = '' or bytes,
-             options: AllOptionsDict = {}) -> dict:
+             options: ExpandedOptionsDict = {}) -> dict:
 
         url: str = self.url + '/verify?'
         # Validation loop and adding fields to the url.

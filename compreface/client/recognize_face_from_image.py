@@ -13,14 +13,11 @@
     or implied. See the License for the specific language governing
     permissions and limitations under the License.
  """
+import requests
 
 from compreface.common.multipart_constructor import multipart_constructor
-from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
+from compreface.common.typed_dict import AllOptionsDict, check_fields_by_name
 from compreface.config.api_list import RECOGNIZE_API
-import os
-import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
-
 from ..common import ClientRequest
 
 
@@ -47,7 +44,7 @@ class RecognizeFaceFromImageClient(ClientRequest):
         :return: json from server.
     """
 
-    def post(self, image: str = '' or bytes, options: ExpandedOptionsDict = {}):
+    def post(self, image: str = '' or bytes, options: AllOptionsDict = {}):
         url: str = self.url + "?"
 
         # Validation loop and adding fields to the url.

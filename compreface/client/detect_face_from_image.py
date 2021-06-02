@@ -14,13 +14,11 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.multipart_constructor import multipart_constructor
-import os
 import requests
-from compreface.common.typed_dict import AllOptionsDict, check_fields_by_name
+from compreface.common.multipart_constructor import multipart_constructor
+from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
 from ..common import ClientRequest
 from compreface.config.api_list import DETECTION_API
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 
 class DetectFaceFromImageClient(ClientRequest):
@@ -46,7 +44,7 @@ class DetectFaceFromImageClient(ClientRequest):
         :return: json from server.
     """
 
-    def post(self, image: str = '' or bytes, options: AllOptionsDict = {}):
+    def post(self, image: str = '' or bytes, options: ExpandedOptionsDict = {}):
         url: str = self.url + '?'
 
         # Validation loop and adding fields to the url.

@@ -14,7 +14,7 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.typed_dict import ExpandedOptionsDict
+from compreface.common.typed_dict import AllOptionsDict
 from typing import List
 
 from ..common import Service
@@ -49,7 +49,7 @@ class RecognitionService(Service):
         """
         return self.available_services
 
-    def recognize(self, image_path: str, options: ExpandedOptionsDict = {}) -> dict:
+    def recognize(self, image_path: str, options: AllOptionsDict = {}) -> dict:
         """
         Recognize image
         :param image_path:

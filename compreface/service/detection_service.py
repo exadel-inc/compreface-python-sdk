@@ -14,7 +14,7 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.typed_dict import AllOptionsDict
+from compreface.common.typed_dict import ExpandedOptionsDict
 from compreface.use_cases.detect_face_from_image import DetectFaceFromImage
 from typing import List
 
@@ -41,7 +41,7 @@ class DetectionService(Service):
         """
         return self.available_services
 
-    def detect(self, image_path: str, options: AllOptionsDict = {}) -> dict:
+    def detect(self, image_path: str, options: ExpandedOptionsDict = {}) -> dict:
         """
         Detect face in image
         :param image_path:

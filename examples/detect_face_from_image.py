@@ -32,7 +32,6 @@ image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 print(detection.detect(image_path, {
     "limit": 0,
     "det_prob_threshold": 0.8,
-    "prediction_count": 1,
     "face_plugins": "age,gender",
     "status": "true"
 }))

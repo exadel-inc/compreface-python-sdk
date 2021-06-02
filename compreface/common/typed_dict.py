@@ -24,12 +24,12 @@ class DetProbOptionsDict(TypedDict):
 
 class ExpandedOptionsDict(DetProbOptionsDict):
     limit: int
-    prediction_count: int
     status: bool
+    face_plugins: str
 
 
 class AllOptionsDict(ExpandedOptionsDict):
-    face_plugins: str
+    prediction_count: int
 
 
 """ 

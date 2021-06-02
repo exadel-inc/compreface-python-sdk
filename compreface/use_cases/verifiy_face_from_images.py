@@ -15,7 +15,7 @@
  """
 
 from compreface.client.verify_face_from_image import VerifyFaceFromImageClient
-from compreface.common.typed_dict import AllOptionsDict
+from compreface.common.typed_dict import ExpandedOptionsDict
 from dataclasses import dataclass
 
 
@@ -34,7 +34,7 @@ class VerifyFaceFromImage:
             port=port
         )
 
-    def execute(self, request: Request, options: AllOptionsDict = {}):
+    def execute(self, request: Request, options: ExpandedOptionsDict = {}):
         result: dict = self.verify_face_from_image.post(request.source_image_path,
                                                         request.target_image_path,
                                                         options)
