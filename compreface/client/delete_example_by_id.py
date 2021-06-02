@@ -14,9 +14,9 @@
     permissions and limitations under the License.
  """
 
-from compreface.config.api_list import RECOGNIZE_CRUD_API
 import requests
 
+from compreface.config.api_list import RECOGNIZE_CRUD_API
 from ..common import ClientRequest
 
 

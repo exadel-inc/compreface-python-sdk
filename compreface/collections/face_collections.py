@@ -14,15 +14,12 @@
     permissions and limitations under the License.
  """
 
-from compreface.use_cases.verifiy_face_from_images import VerifyFaceFromImage
-from compreface.common.typed_dict import AllOptionsDict, ExpandedOptionsDict, DetProbOptionsDict
-from requests.api import request
+from compreface.common.typed_dict import ExpandedOptionsDict, DetProbOptionsDict
 from ..use_cases import (
     AddExampleOfSubject,
     ListOfAllSavedSubjects,
     DeleteAllExamplesOfSubjectByName,
     DeleteExampleById,
-    DetectFaceFromImage,
     VerificationFaceFromImage
 )
 

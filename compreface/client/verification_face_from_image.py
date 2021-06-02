@@ -13,13 +13,11 @@
     or implied. See the License for the specific language governing
     permissions and limitations under the License.
  """
+import requests
 
 from compreface.common.multipart_constructor import multipart_constructor
-import os
-import requests
 from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
 from compreface.config.api_list import RECOGNIZE_CRUD_API
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 from ..common import ClientRequest
 
 

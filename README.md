@@ -40,6 +40,14 @@ Before using our SDK make sure you have installed CompreFace and Python on your 
 | 0.1.0                     | ✔                | ✔                | 
 
 
+## Installation
+
+It can be installed through pip:
+
+```python
+$ pip install compreface-sdk
+```
+
 ## Usage
 
 ### Initialization
@@ -169,6 +177,9 @@ face_collection.verify(image_path=image_path, image_id=image_id, options={
 Here is example to detect faces from a given image.
 
 ```python
+from compreface import CompreFace
+from compreface.service import DetectionService
+
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
 DETECTION_API_KEY: str = 'a482a613-3118-4554-a295-153bd6e8ac65'
@@ -193,6 +204,9 @@ detection.detect(image_path=image_path, options={
 Here is example to verify face from a given images.
 
 ```python
+from compreface import CompreFace
+from compreface.service import VerificationService
+
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
 VERIFICATION_API_KEY: str = '3c6171a4-e115-41f0-afda-4032bda4bfe9'
