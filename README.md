@@ -4,6 +4,7 @@ CompreFace Python SDK makes face recognition into your application even easier.
 
 ## Table of content
   - [Requirements](#requirements)
+  - [Installation](#installation)
   - [Usage](#usage)
     - [Initialization](#initialization)
     - [Example Add an Example of a Subject](#example-add-an-example-of-a-subject)
