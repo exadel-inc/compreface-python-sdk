@@ -1,11 +1,11 @@
-# CompreFace Python-SDK
+# CompreFace Python SDK
 
 CompreFace Python SDK makes face recognition into your application even easier.
 
 ## Table of content
-  - [Requirements](#requirements)
-  - [Installation](#installation)
-  - [Usage](#usage)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
     - [Initialization](#initialization)
     - [Example Add an Example of a Subject](#example-add-an-example-of-a-subject)
     - [Example Recognize Faces from a Given Image](#example-recognize-faces-from-a-given-image)
@@ -15,7 +15,8 @@ CompreFace Python SDK makes face recognition into your application even easier.
     - [Example Compare Faces from a Given Image](#example-compare-faces-from-a-given-image)
     - [Example Detect Faces from a Given Image](#example-detect-faces-from-a-given-image)
     - [Example Verify Face from a Given Images](#example-verify-face-from-a-given-images)
-  - [Reference](#reference)
+- [Reference](#reference)
+    - [CompreFace Global Object](#compreFace-global-object)
     - [Options structure](#options-structure)
     - [Face Recognition Service](#face-recognition-service)
       - [Add an Example of a Subject](#add-an-example-of-a-subject)
@@ -23,7 +24,7 @@ CompreFace Python SDK makes face recognition into your application even easier.
       - [List of All Saved Subjects](#list-of-all-saved-subjects)
       - [Delete All Examples of the Subject by Name](#delete-all-examples-of-the-subject-by-name)
       - [Delete an Example of the Subject by ID](#delete-an-example-of-the-subject-by-id)
-      - [Compare Faces from a Given Image](#compare-faces-from-a-given-image)
+      - [Verify Faces from a Given Image](#verify-faces-from-a-given-image)
     - [Face Detection Service](#face-detection-service)
     - [Face Verification Service](#face-verification-service)
 
@@ -37,23 +38,25 @@ Before using our SDK make sure you have installed CompreFace and Python on your 
 ### CompreFace compatibility matrix
 
 | CompreFace Python SDK version | CompreFace 0.4.x | CompreFace 0.5.x |
-| --------------------------| ---------------- | ---------------- | 
-| 0.1.0                     | ✔                | ✔                | 
+| ------------------------------| ---------------- | ---------------- | 
+| 0.1.0                         | ✔                | ✔                | 
 
 
 ## Installation
 
 It can be installed through pip:
 
-```python
-$ pip install compreface-sdk
+```shell
+pip install compreface-sdk
 ```
 
 ## Usage
 
+All these examples you can find in repository inside [examples](/examples) folder.
+
 ### Initialization
 
-To start using Python SDK you need to import `CompreFace` object from 'compreface-python-sdk' dependency.  
+To start using Python SDK you need to import `CompreFace` object from 'compreface-sdk' dependency.  
 
 Then you need to init it with `url` and `port`. By default, if you run CompreFace on your local machine, it's `http://localhost` and `8000` respectively.
 You can pass optional `options` object when call method to set default parameters, see reference for [more information](#options-structure).
@@ -66,10 +69,9 @@ However, before recognizing you need first to add faces into the face collection
 from compreface import CompreFace
 from compreface.service import RecognitionService
 
-
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-API_KEY: str = '7dacfc8e-1bb1-4fcf-a9b1-76e4d9d89855'
+API_KEY: str = 'your_face_recognition_key'
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
@@ -78,71 +80,51 @@ recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
 face_collection: FaceCollection = recognition.get_face_collection()
 ```
 
-### Example Add an Example of a Subject
-
-**All this examples you can find in repository inside "examples" folder.**
+### Example. Add an Example of a Subject
 
 Here is example that shows how to add an image to your face collection from your file system:
 
 ```python
-face_collection: FaceCollection = recognition.get_face_collection()
-
 image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 subject: str = 'Jonathan Petit'
 
-face_collection.add(image_path=image_path, subject=subject, options={
-    "det_prob_threshold": 0.8
-})
-
+face_collection.add(image_path=image_path, subject=subject)
 ```
 
-### Example Recognize Faces from a Given Image
+### Example. Recognize Faces from a Given Image
 
 This code snippet shows how to recognize unknown face.
 
 ```python
-image_path: str or bytes
+image_path: "str or bytes"
 
-recognition.recognize(image_path=image_path, options={
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "prediction_count": 1,
-    "status": "true"
-}))
-
-
+recognition.recognize(image_path=image_path)
 ```
 
-### Example List of All Saved Subjects
+### Example. List of All Saved Subjects
 
-Here is example to retrieve a list of subjects saved in a Face Collection:
+This code shows how to retrieve a list of subject examples saved in a Face Collection:
 
 ```python
-face_collection: FaceCollection = recognition.get_face_collection()
-
 face_collection.list()
 ```
 
-### Example Delete All Examples of the Subject by Name
+### Example. Delete All Examples of the Subject by Name
 
-Here is example to delete all image examples of the <subject>:
+This code shows how to delete all image examples of the subject:
 
 ```python
-face_collection: FaceCollection = recognition.get_face_collection()
-
 subject: str = 'Jonathan Petit'
 
 print(face_collection.delete_all(subject))
 
 ```
 
-### Example Delete an Example of the Subject by ID
+### Example. Delete an Example of the Subject by ID
 
-This example to delete an image by ID(ID is last and given from server):
+This example to delete an image by ID:
 
 ```python
-face_collection: FaceCollection = recognition.get_face_collection()
-
 faces: list = face_collection.list().get('faces')
 
 if(len(faces) != 0):
@@ -153,27 +135,22 @@ else:
 
 ```
 
-### Example Compare Faces from a Given Image
+### Example. Compare Faces from a Given Image
 
-Here is example to compare faces from the uploaded images with the face in saved image ID:
+This example shows how to compare unknown face with existing face in face collection:
 
 ```python
-face_collection: FaceCollection = recognition.get_face_collection()
+image_path: "str or bytes"
 
 face: dict = next(item for item in face_collection.list().get('faces') if item['subject'] ==
                   'Jonathan Petit')
 
 image_id = face.get('image_id')
 
-face_collection.verify(image_path=image_path, image_id=image_id, options={
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "prediction_count": 1,
-    "status": "true"
-})
+face_collection.verify(image_path=image_path, image_id=image_id)
 ```
 
-### Example Detect Faces from a Given Image
+### Example. Detect Faces from a Given Image
 
 Here is example to detect faces from a given image.
 
@@ -183,25 +160,18 @@ from compreface.service import DetectionService
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-DETECTION_API_KEY: str = 'a482a613-3118-4554-a295-153bd6e8ac65'
+DETECTION_API_KEY: str = 'your_face_detection_key'
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-detection: DetectionService = compre_face.init_face_recognition(
-    DETECTION_API_KEY)
+detection: DetectionService = compre_face.init_face_detection(DETECTION_API_KEY)
 
 image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 
-detection.detect(image_path=image_path, options={
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "prediction_count": 1,
-    "face_plugins": "calculator,age,gender,landmarks",
-    "status": "true"
-})
+detection.detect(image_path=image_path)
 ```
 
-### Example Verify Face from a Given Images
+### Example. Verify Face from a Given Images
 Here is example to verify face from a given images.
 
 ```python
@@ -210,31 +180,122 @@ from compreface.service import VerificationService
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-VERIFICATION_API_KEY: str = '3c6171a4-e115-41f0-afda-4032bda4bfe9'
-
+VERIFICATION_API_KEY: str = 'your_face_verification_key'
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-verify: VerificationService = compre_face.init_face_verification(
-    VERIFICATION_API_KEY)
+verify: VerificationService = compre_face.init_face_verification(VERIFICATION_API_KEY)
 
 image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 
-
-verify.verify(image_path, image_path, {
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "prediction_count": 1,
-    "face_plugins": "age,gender",
-    "status": "true"
-})
+verify.verify(source_image_path=image_path, target_image_path=image_path)
 ```
 
 ## Reference
 
-## Options structure
+### CompreFace Global Object
 
-**Options is optional field in every request.**
+Global CompreFace Object is used for initializing connection to CompreFace and setting default values for options.
+Default values will be used in every service method if applicable.
+If the option’s value is set in the global object and passed as a function argument then the function argument value will be used.
+
+**Constructor:**
+
+```CompreFace(domain, port, options)```
+
+| Argument | Type   | Required | Notes                                     | 
+| ---------| ------ | -------- | ----------------------------------------- | 
+| url      | string | required | URL with protocol where CompreFace is located. E.g. `http://localhost` |
+| port     | string | required | CompreFace port. E.g. `8000` |
+| options  | object | optional | Default values for face recognition services. See more [here](#options-structure). `AllOptionsDict` object can be used in this method   |
+
+Possible options:
+
+| Option              | Type    | Notes                                     |
+| --------------------| ------  | ----------------------------------------- |
+| det_prob_threshold  | string  | minimum required confidence that a recognized face is actually a face. Value is between 0.0 and 1.0 |
+| limit               | integer | maximum number of faces on the image to be recognized. It recognizes the biggest faces first. Value of 0 represents no limit. Default value: 0       |
+| prediction_count    | integer | maximum number of subject predictions per face. It returns the most similar subjects. Default value: 1    |
+| face_plugins        | string  | comma-separated slugs of face plugins. If empty, no additional information is returned. [Learn more](https://github.com/exadel-inc/CompreFace/tree/master/docs/Face-services-and-plugins.md)    |
+| status              | boolean | if true includes system information like execution_time and plugin_version fields. Default value is false    |
+
+Example:
+
+```python
+from compreface import CompreFace
+
+DOMAIN: str = 'http://localhost'
+PORT: str = '8000'
+
+compre_face: CompreFace = CompreFace(domain=DOMAIN, port=PORT, options={
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "prediction_count": 1,
+    "face_plugins": "calculator,age,gender,landmarks",
+    "status": "true"
+})
+```
+
+**Methods:**
+
+1. ```CompreFace.init_face_recognition(api_key)```
+
+Inits face recognition service object.
+
+| Argument | Type   | Required | Notes                                     |
+| ---------| ------ | -------- | ----------------------------------------- |
+| api_key  | string | required | Face Recognition Api Key in UUID format    |
+
+Example:
+
+```python
+from compreface.service import RecognitionService
+
+API_KEY: str = 'your_face_recognition_key'
+
+recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
+```
+
+2. ```CompreFace.init_face_detection(api_key)```
+
+Inits face detection service object.
+
+| Argument | Type   | Required | Notes                                     |
+| ---------| ------ | -------- | ----------------------------------------- |
+| api_key  | string | required | Face Detection Api Key in UUID format    |
+
+Example:
+
+```python
+from compreface.service import DetectionService
+
+DETECTION_API_KEY: str = 'your_face_detection_key'
+
+detection: DetectionService = compre_face.init_face_detection(DETECTION_API_KEY)
+```
+
+3. ```CompreFace.init_face_verification(api_key)```
+
+Inits face verification service object.
+
+| Argument | Type   | Required | Notes                                     |
+| ---------| ------ | -------- | ----------------------------------------- |
+| api_key  | string | required | Face Verification Api Key in UUID format    |
+
+Example:
+
+```python
+from compreface.service import VerificationService
+
+VERIFICATION_API_KEY: str = 'your_face_verification_key'
+
+verify: VerificationService = compre_face.init_face_verification(VERIFICATION_API_KEY)
+```
+
+### Options structure
+
+Options is optional field in every request that contains an image.
+If the option’s value is set in the global object and passed as a function argument then the function argument value will be used.
 
 ```python 
 
@@ -260,21 +321,39 @@ class AllOptionsDict(ExpandedOptionsDict):
 | face_plugins        | string  | comma-separated slugs of face plugins. If empty, no additional information is returned. [Learn more](https://github.com/exadel-inc/CompreFace/tree/master/docs/Face-services-and-plugins.md)    |
 | status              | boolean | if true includes system information like execution_time and plugin_version fields. Default value is false    |
 
+Example of face recognition with object:
+
+```python
+recognition.recognize(image_path=image_path, options={
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "prediction_count": 1,
+    "face_plugins": "calculator,age,gender,landmarks",
+    "status": "true"
+})
+```
+
 ### Face Recognition Service
 
-### Add an Example of a Subject
+Face recognition service is used for face identification.
+This means that you first need to upload known faces to face collection and then recognize unknown faces among them.
+When you upload an unknown face, the service returns the most similar faces to it.
+Also, face recognition service supports verify endpoint to check if this person from face collection is the correct one.
+For more information, see [CompreFace page](https://github.com/exadel-inc/CompreFace).
+
+#### Add an Example of a Subject
 
 This creates an example of the subject by saving images. You can add as many images as you want to train the system.
 
 ```python
-FaceCollection.add(file, subject, options)
+FaceCollection.add(image_path, subject, options)
 ```
 
-| Element            | Description | Type   | Required | Notes                                                                                                |
-| ------------------ | ----------- | ------ | -------- | ---------------------------------------------------------------------------------------------------- |
-| subject            | param       | string | required | is the name you assign to the image you save                                                         |
-| options | param       | string | Object | fields from [Options](#options-structure). Only used here DetProbOptionsDict |
-| file               | body        | image  | required | Image can pass from url, local path or bytes. Max size is 5Mb               |
+| Argument           | Type   | Required | Notes                                                                                                |
+| ------------------ | ------ | -------- | ---------------------------------------------------------------------------------------------------- |
+| image_path         | image  | required | Image can pass from url, local path or bytes. Max size is 5Mb               |
+| subject            | string | required | is the name you assign to the image you save                                                         |
+| options            | object | optional | `DetProbOptionsDict` object can be used in this method. See more [here](#options-structure).  |
 
 Response body on success:
 
@@ -295,13 +374,13 @@ Response body on success:
 Recognizes faces from the uploaded image.
 
 ```python
-RecognitionService.recognize(file, options)
+RecognitionService.recognize(image_path, options)
 ```
 
-| Element            | Description | Type    | Required | Notes                                                                                                                                          |
-| ------------------ | ----------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| file               | body        | image   | required | Image can pass from url, local path or bytes. Max size is 5Mb                                                         |
-| options | param       | string | Object | fields from [Options](#options-structure). All of the OptionsDict are used here  |
+| Argument           | Type    | Required | Notes                                                                                                                                          |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| image_path         | image   | required | Image can pass from url, local path or bytes. Max size is 5Mb                                                         |
+| options            | object  | optional | `AllOptionsDict` object can be used in this method. See more [here](#options-structure).  |
 
 Response body on success:
 
@@ -400,9 +479,9 @@ To delete all image examples of the <subject>:
 FaceCollection.delete_all(subject)
 ```
 
-| Element   | Description | Type   | Required | Notes                                                                                                                                |
-| --------- | ----------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| subject   | param       | string | optional | is the name you assign to the image you save. **Caution!** If this parameter is absent, all faces in Face Collection will be removed |
+| Argument  | Type   | Required | Notes                                                                                                                                |
+| --------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| subject   | string | optional | is the name you assign to the image you save. If this parameter is absent, all faces in Face Collection will be removed |
 
 Response body on success:
 
@@ -428,9 +507,9 @@ To delete an image by ID:
 ```python
 FaceCollection.delete(image_id)
 ```
-| Element   | Description | Type   | Required | Notes                                                        |
-| --------- | ----------- | ------ | -------- | ------------------------------------------------------------ 
-| image_id  | variable    | UUID   | required | UUID of the removing face                                    |
+| Argument  | Type   | Required | Notes                                                        |
+| --------- | ------ | -------- | ------------------------------------------------------------ 
+| image_id  | UUID   | required | UUID of the removing face                                    |
 
 Response body on success:
 
@@ -448,17 +527,18 @@ Response body on success:
 
 ### Verify Faces from a Given Image
 
-To compare faces from the uploaded images with the face in saved image ID:
-
 ```python
-FaceCollection.verify(image_id, file, options)
+FaceCollection.verify(image_path, image_id, options)
 ```
 
-| Element            | Description | Type    | Required | Notes                                                                                                                                                 |
-| ------------------ | ----------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| image_id           | variable    | UUID    | required | UUID of the verifying face                                                                                                                            |
-| file               | body        | image   | required | Image can pass from url, local path or bytes. Max size is 5Mb                                                                |
-| options | param       | string | Object | fields from [Options](#options-structure). ExpandedOptionsDict or DetProbOptionsDict are used here  |
+Compares similarities of given image with image from your face collection.
+
+
+| Argument           | Type    | Required | Notes                                                                                                                                                 |
+| ------------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| image_path         | image   | required | Image can pass from url, local path or bytes. Max size is 5Mb                                                                |
+| image_id           | UUID    | required | UUID of the verifying face                                                                                                                            |
+| options            | string  | Object   | `ExpandedOptionsDict` object can be used in this method. See more [here](#options-structure).  |
 
 Response body on success:
 
@@ -488,19 +568,24 @@ Response body on success:
 | similarity                 | float   | similarity that on that image predicted person       |
 | subject                    | string  | name of the subject in Face Collection               |
 
-## Face Detection Service
+### Face Detection Service
 
-To detect faces from the uploaded image:
+Face detection service is used for detecting faces in the image.
+
+**Methods:**
+
+#### Detect
 
 ```python
-DetectionService.detect(file, options)
+DetectionService.detect(image_path, options)
 ```
 
-| Element            | Description | Type    | Required | Notes                                                                                                                                          |
-| ------------------ | ----------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| image_id           | variable    | UUID    | required | UUID of the verifying face                                                                                                                     |
-| file               | body        | image   | required | image where to detect faces. Image can pass from url, local path or bytes. Max size is 5Mb                            |
-| options | param       | string | Object | fields from [Options](#options-structure). ExpandedOptionsDict or DetProbOptionsDict are used here  |
+Finds all faces on the image.
+
+| Argument          | Type    | Required | Notes                                                                                                                                          |
+| ----------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| image_path        | image   | required | image where to detect faces. Image can pass from url, local path or bytes. Max size is 5Mb                            |
+| options           | string  | Object   | `ExpandedOptionsDict` object can be used in this method. See more [here](#options-structure).  |
 
 Response body on success:
 
@@ -544,18 +629,23 @@ Response body on success:
 
 ## Face Verification Service
 
-To compare faces from given two images:
+Face verification service is used for comparing two images.
+A source image should contain only one face which will be compared to all faces on the target image.
+
+**Methods:**
 
 ```python
-VerificationService.verify(source_image, target_image, options)
+VerificationService.verify(source_image_path, target_image_path, options)
 ```
 
-| Element            | Description | Type    | Required | Notes                                                                                                                                                 |
-| ------------------ | ----------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| image_id           | variable    | UUID    | required | UUID of the verifying face                                                                                                                            |
-| source_image       | body        | image   | required | file to be verified. Image can pass from url, local path or bytes. Max size is 5Mb                                           |
-| target_image       | body        | image   | required | reference file to check the source file. Image can pass from url, local path or bytes. Max size is 5Mb                       |
-| options | param       | string | Object | fields from [Options](#options-structure). ExpandedOptionsDict or DetProbOptionsDict are used here  |                                          
+Compares two images provided in arguments. Source image should contain only one face, it will be compared to all faces in the target image.
+
+| Argument            | Type    | Required | Notes                                                                                                                                                 |
+| ------------------  | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| image_id            | UUID    | required | UUID of the verifying face                                                                                                                            |
+| source_image_path   | image   | required | file to be verified. Image can pass from url, local path or bytes. Max size is 5Mb                                           |
+| target_image_path   | image   | required | reference file to check the source file. Image can pass from url, local path or bytes. Max size is 5Mb                       |
+| options             | string  | Object   | `ExpandedOptionsDict` object can be used in this method. See more [here](#options-structure).  |
 
 Response body on success:
 
@@ -601,6 +691,7 @@ Response body on success:
     "detector" : "facenet.FaceDetector",
     "calculator" : "facenet.Calculator"
   }
+ }
 }
 ```
 
@@ -618,3 +709,38 @@ Response body on success:
 | similarity                 | float   | similarity between this face and the face on the source image                      |
 | execution_time             | object  | execution time of all plugins                                                      |
 | plugins_versions           | object  | contains information about plugin versions                                         |
+
+# Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are greatly appreciated.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+After creating your first contributing pull request, you will receive a request to sign our Contributor License Agreement by commenting your pull request with a special message.
+
+### Report Bugs
+
+Please report any bugs [here](https://github.com/exadel-inc/compreface-python-sdk/issues).
+
+If you are reporting a bug, please specify:
+
+- Your operating system name and version
+- Any details about your local setup that might be helpful in troubleshooting
+- Detailed steps to reproduce the bug
+
+### Submit Feedback
+
+The best way to send us feedback is to file an issue at https://github.com/exadel-inc/compreface-python-sdk/issues.
+
+If you are proposing a feature, please:
+
+- Explain in detail how it should work.
+- Keep the scope as narrow as possible to make it easier to implement.
+
+# License info
+
+CompreFace Python SDK is open-source facial recognition SDK released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
