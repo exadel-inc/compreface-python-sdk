@@ -37,9 +37,9 @@ Before using our SDK make sure you have installed CompreFace and Python on your 
 
 ### CompreFace compatibility matrix
 
-| CompreFace Python SDK version | CompreFace 0.4.x | CompreFace 0.5.x |
-| ------------------------------| ---------------- | ---------------- | 
-| 0.1.0                         | ✔                | ✔                | 
+| CompreFace Python SDK version | CompreFace 0.5.x |
+| ------------------------------| ---------------- | 
+| 0.1.0                         | ✔                | 
 
 
 ## Installation
@@ -68,6 +68,7 @@ However, before recognizing you need first to add faces into the face collection
 ```python
 from compreface import CompreFace
 from compreface.service import RecognitionService
+from compreface.collections import FaceCollection
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
