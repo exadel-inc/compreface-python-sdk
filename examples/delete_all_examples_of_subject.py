@@ -20,7 +20,7 @@ from compreface.collections import FaceCollection
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-RECOGNITION_API_KEY: str = '9916f5d1-216f-4049-9e06-51c140bfa898'
+RECOGNITION_API_KEY: str = 'b97fbc0a-518a-4b1d-a93a-581b1d3814cc'
 
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)

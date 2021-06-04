@@ -14,7 +14,7 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.typed_dict import ExpandedOptionsDict
+from compreface.common.typed_dict import AllOptionsDict, ExpandedOptionsDict, pass_dict
 from compreface.use_cases.detect_face_from_image import DetectFaceFromImage
 from typing import List
 
@@ -24,9 +24,9 @@ from ..common import Service
 class DetectionService(Service):
     """Detection service"""
 
-    def __init__(self, api_key: str, domain: str, port: str):
+    def __init__(self, api_key: str, domain: str, port: str, options: AllOptionsDict = {}):
         """Init service with define API Key"""
-        super().__init__(api_key)
+        super().__init__(api_key, options)
         self.available_services = []
         self.detect_face_from_image: DetectFaceFromImage = DetectFaceFromImage(
             domain=domain,
@@ -52,4 +52,5 @@ class DetectionService(Service):
             api_key=self.api_key,
             image_path=image_path
         )
-        return self.detect_face_from_image.execute(request, options)
+        return self.detect_face_from_image.execute(request, pass_dict(
+            self.options, ExpandedOptionsDict) if options == {} else options)

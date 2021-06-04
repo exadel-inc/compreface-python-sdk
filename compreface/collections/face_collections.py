@@ -14,7 +14,7 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.typed_dict import ExpandedOptionsDict, DetProbOptionsDict
+from compreface.common.typed_dict import AllOptionsDict, ExpandedOptionsDict, DetProbOptionsDict, pass_dict
 from ..use_cases import (
     AddExampleOfSubject,
     ListOfAllSavedSubjects,
@@ -25,10 +25,11 @@ from ..use_cases import (
 
 
 class FaceCollection:
-    def __init__(self, api_key: str, domain: str, port: str):
+    def __init__(self, api_key: str, domain: str, port: str, options: AllOptionsDict = {}):
         """Init service with define API Key"""
         self.available_services = []
         self.api_key = api_key
+        self.options = options
         self.add_example: AddExampleOfSubject = AddExampleOfSubject(
             domain=domain,
             port=port,
@@ -67,7 +68,7 @@ class FaceCollection:
             image_path=image_path,
             subject=subject
         )
-        return self.add_example.execute(request, options)
+        return self.add_example.execute(request, pass_dict(options, DetProbOptionsDict) if options == {} else options)
 
     def list(self) -> dict:
         """
@@ -112,4 +113,4 @@ class FaceCollection:
             image_path=image_path,
             image_id=image_id
         )
-        return self.verify_face_from_image.execute(request, options)
+        return self.verify_face_from_image.execute(request, pass_dict(options, ExpandedOptionsDict) if options == {} else options)

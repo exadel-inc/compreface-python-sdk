@@ -58,3 +58,12 @@ def check_fields_by_name(name: str, value: Any):
             if row.find('age') == -1 and row.find('calculator') == -1 and row.find('gender') == -1 and row.find('landmarks') == -1:
                 raise IncorrectFieldException(
                     "face_plugins must be only contains calculator,age,gender,landmarks. Incorrect value {}".format(row))
+
+
+def pass_dict(options: AllOptionsDict, type: DetProbOptionsDict or ExpandedOptionsDict):
+    converted_options: ExpandedOptionsDict or DetProbOptionsDict = {}
+    for key in type.__annotations__.keys():
+        value = options.get(key)
+        if value != None:
+            converted_options[key] = value
+    return converted_options

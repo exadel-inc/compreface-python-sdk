@@ -15,18 +15,24 @@
  """
 
 from abc import ABC, abstractmethod
+from compreface.common.typed_dict import AllOptionsDict
 
 
 class Service(ABC):
     """The best class of all services"""
 
     @abstractmethod
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, options: AllOptionsDict):
         self._api_key = api_key
+        self._options = options
 
     @property
     def api_key(self):
         return self._api_key
+
+    @property
+    def options(self):
+        return self._options
 
     @abstractmethod
     def get_available_functions(self):

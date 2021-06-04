@@ -20,18 +20,18 @@ from compreface.service import DetectionService
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-DETECTION_API_KEY: str = 'a482a613-3118-4554-a295-153bd6e8ac65'
+DETECTION_API_KEY: str = '444dc40f-3168-43d5-8cca-108ab401ff5c'
 
-compre_face: CompreFace = CompreFace(DOMAIN, PORT)
+compre_face: CompreFace = CompreFace(DOMAIN, PORT, {
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "face_plugins": "age,gender",
+    "status": "true"
+})
 
 detection: DetectionService = compre_face.init_face_detection(
     DETECTION_API_KEY)
 
 image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 
-print(detection.detect(image_path, {
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "face_plugins": "age,gender",
-    "status": "true"
-}))
+print(detection.detect(image_path))

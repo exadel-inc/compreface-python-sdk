@@ -19,10 +19,15 @@ from compreface.service import VerificationService
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-VERIFICATION_API_KEY: str = '3c6171a4-e115-41f0-afda-4032bda4bfe9'
+VERIFICATION_API_KEY: str = '7aa288a2-9082-4fa2-a975-e175deba1ad2'
 
 
-compre_face: CompreFace = CompreFace(DOMAIN, PORT)
+compre_face: CompreFace = CompreFace(DOMAIN, PORT, {
+    "limit": 0,
+    "det_prob_threshold": 0.8,
+    "face_plugins": "age,gender",
+    "status": "true"
+})
 
 verify: VerificationService = compre_face.init_face_verification(
     VERIFICATION_API_KEY)
@@ -30,9 +35,4 @@ verify: VerificationService = compre_face.init_face_verification(
 image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 
 
-print(verify.verify(image_path, image_path, {
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "face_plugins": "age,gender",
-    "status": "true"
-}))
+print(verify.verify(image_path, image_path))

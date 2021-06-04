@@ -92,5 +92,9 @@ Thumbs.db
 .history
 .ionide
 
-
+# Vscode
 .vscode
+
+#Idea
+.idea
+.idea/*

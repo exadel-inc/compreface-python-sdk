@@ -27,9 +27,9 @@ from ..use_cases import (
 class RecognitionService(Service):
     """Recognition service"""
 
-    def __init__(self, api_key: str, domain: str, port: str):
+    def __init__(self, api_key: str, domain: str, port: str, options: AllOptionsDict = {}):
         """Init service with define API Key"""
-        super().__init__(api_key)
+        super().__init__(api_key, options)
         self.available_services = []
         self.recognize_face_from_images: RecognizeFaceFromImage = RecognizeFaceFromImage(
             domain=domain,
@@ -39,7 +39,8 @@ class RecognitionService(Service):
         self.face_collection: FaceCollection = FaceCollection(
             domain=domain,
             port=port,
-            api_key=api_key
+            api_key=api_key,
+            options=options
         )
 
     def get_available_functions(self) -> List[str]:
@@ -60,7 +61,7 @@ class RecognitionService(Service):
             api_key=self.api_key,
             image_path=image_path
         )
-        return self.recognize_face_from_images.execute(request, options)
+        return self.recognize_face_from_images.execute(request, self.options if options == {} else options)
 
     def get_face_collection(self) -> FaceCollection:
         """

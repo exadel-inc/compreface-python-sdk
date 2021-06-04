@@ -24,12 +24,19 @@ setup(
     version='0.1.0',
     license='apache-2.0',
     description='CompreFace Python SDK makes face recognition into your application even easier.',
-    author='Exadel-Inc',  # Not sure about that.
-    author_email='your.email@domain.com',  # Need to complete.
-    url='https://github.com/exadel-inc/compreface-python-sdk',
-    # Not sure about that.
-    download_url='https://github.com/exadel-inc/compreface-python-sdk/v_01.tar.gz',
-    keywords=['CompreFace'],
+    author='Artsiom Liubymov aliubymov@exadel.com, Artsiom Khadzkou akhadzkou@exadel.com',
+    author_email='aliubymov@exadel.com, akhadzkou@exadel.com',
+    url='https://exadel.com/solutions/compreface/',
+    download_url='https://github.com/exadel-inc/compreface-python-sdk/0.1.0.tar.gz',
+    keywords=[
+        "CompreFace",
+        "Face Recognition",
+        "Face Detection",
+        "Face Verification",
+        "Face Identification",
+        "Computer Vision",
+        "SDK"
+    ],
     install_requires=[
         'requests-toolbelt==0.9.1'
     ],

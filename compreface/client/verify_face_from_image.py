@@ -17,9 +17,6 @@
 from compreface.common.multipart_constructor import multipart_constructor_with_two_images
 import requests
 from compreface.config.api_list import VERIFICATION_API
-import os
-
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
 from compreface.common.client import ClientRequest
 
@@ -42,8 +39,8 @@ class VerifyFaceFromImageClient(ClientRequest):
     """
         POST request for verify face in image using source and target images. 
         
-        :param source_image_path: Path to source image in file system.
-        :param target_image_path: Path to target image in file system.
+        :param source_image: Path to source image in file system.
+        :param target_image: Path to target image in file system.
         :param image_id: subject id from previously added image. 
         :param options: dictionary with options for server.
         

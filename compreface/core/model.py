@@ -14,6 +14,7 @@
     permissions and limitations under the License.
  """
 
+from compreface.common.typed_dict import AllOptionsDict
 from typing import Optional
 from ..service import (
     RecognitionService,
@@ -27,9 +28,10 @@ class CompreFace(object):
     Main class
     """
 
-    def __init__(self, domain: str, port: str):
+    def __init__(self, domain: str, port: str, options: AllOptionsDict = {}):
         self._domain: str = domain
         self._port: str = port
+        self._options: AllOptionsDict = options
         self.recognition: Optional[RecognitionService] = None
         self.verification: Optional[VerificationService] = None
         self.detection: Optional[DetectionService] = None
@@ -50,6 +52,14 @@ class CompreFace(object):
     def port(self, port: str):
         self._port = port
 
+    @property
+    def options(self):
+        return self._options
+
+    @options.setter
+    def options(self, options: AllOptionsDict):
+        self._options = options
+
     def init_face_recognition(self, api_key: str) -> RecognitionService:
         """
         Init Face Recognition Service
@@ -58,7 +68,8 @@ class CompreFace(object):
         """
         self.recognition = RecognitionService(api_key=api_key,
                                               domain=self.domain,
-                                              port=self.port)
+                                              port=self.port,
+                                              options=self.options)
         return self.recognition
 
     def init_face_verification(self, api_key: str) -> VerificationService:
@@ -69,7 +80,8 @@ class CompreFace(object):
         """
         self.verification = VerificationService(api_key=api_key,
                                                 domain=self.domain,
-                                                port=self.port)
+                                                port=self.port,
+                                                options=self.options)
         return self.verification
 
     def init_face_detection(self, api_key: str) -> DetectionService:
@@ -78,6 +90,8 @@ class CompreFace(object):
         :param api_key:
         :return:
         """
-        self.detection = DetectionService(api_key=api_key, domain=self.domain,
-                                          port=self.port)
+        self.detection = DetectionService(api_key=api_key,
+                                          domain=self.domain,
+                                          port=self.port,
+                                          options=self.options)
         return self.detection
