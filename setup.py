@@ -17,13 +17,17 @@
 
 from setuptools import find_packages, setup
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 setup(
     name='compreface-sdk',
-    packages=find_packages(where='compreface', include=['examples']),
+    packages=find_packages(exclude=("tests",)),
     version='0.1.0',
-    license='apache-2.0',
+    license='Apache License 2.0',
     description='CompreFace Python SDK makes face recognition into your application even easier.',
+	long_description=long_description,
+	long_description_content_type="text/markdown",
     author='Artsiom Liubymov aliubymov@exadel.com, Artsiom Khadzkou akhadzkou@exadel.com',
     author_email='aliubymov@exadel.com, akhadzkou@exadel.com',
     url='https://exadel.com/solutions/compreface/',
@@ -43,8 +47,15 @@ setup(
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Intended Audience :: Information Technology',
+        'Topic :: Software Development',
         'Topic :: Software Development :: Build Tools',
-        'License :: OSI Approved :: Apache license 2.0',
-        'Programming Language :: Python :: 3.7+',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Scientific/Engineering :: Image Recognition',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7'
     ],
 )
