@@ -31,7 +31,7 @@ setup(
     author='Artsiom Liubymov aliubymov@exadel.com, Artsiom Khadzkou akhadzkou@exadel.com',
     author_email='aliubymov@exadel.com, akhadzkou@exadel.com',
     url='https://exadel.com/solutions/compreface/',
-    download_url='https://github.com/exadel-inc/compreface-python-sdk/0.1.0.tar.gz',
+    download_url='https://github.com/exadel-inc/compreface-python-sdk/archive/refs/tags/0.1.0.tar.gz',
     keywords=[
         "CompreFace",
         "Face Recognition",
