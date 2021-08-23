@@ -14,13 +14,20 @@
     permissions and limitations under the License.
  """
 
+from compreface import CompreFace
+from compreface.service import RecognitionService
+from compreface.collections import FaceCollection
 
-RECOGNITION_ROOT_API: str = '/api/v1/recognition'
+DOMAIN: str = 'http://localhost'
+PORT: str = '8000'
+RECOGNITION_API_KEY: str = 'b97fbc0a-518a-4b1d-a93a-581b1d3814cc'
 
-RECOGNIZE_API: str = RECOGNITION_ROOT_API + '/recognize'
-RECOGNIZE_CRUD_API: str = RECOGNITION_ROOT_API + '/faces'
-SUBJECTS_CRUD_API: str = RECOGNITION_ROOT_API + '/subjects'
+compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-DETECTION_API: str = '/api/v1/detection/detect'
+recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-VERIFICATION_API: str = '/api/v1/verification'
+face_collection: FaceCollection = recognition.get_face_collection()
+
+subject: str = 'Test Subject 2'
+
+print(face_collection.add_subject_by_name(subject))

@@ -14,13 +14,24 @@
     permissions and limitations under the License.
  """
 
+from dataclasses import dataclass
 
-RECOGNITION_ROOT_API: str = '/api/v1/recognition'
+from compreface.client.subject_client import SubjectClient
 
-RECOGNIZE_API: str = RECOGNITION_ROOT_API + '/recognize'
-RECOGNIZE_CRUD_API: str = RECOGNITION_ROOT_API + '/faces'
-SUBJECTS_CRUD_API: str = RECOGNITION_ROOT_API + '/subjects'
 
-DETECTION_API: str = '/api/v1/detection/detect'
+class DeleteAllSubjects:
 
-VERIFICATION_API: str = '/api/v1/verification'
+    @dataclass
+    class Request:
+        pass
+
+    def __init__(self, domain: str, port: str, api_key: str):
+        self.add_subject = SubjectClient(
+            api_key=api_key,
+            domain=domain,
+            port=port
+        )
+
+    def execute(self) -> dict:
+        result: dict = self.add_subject.delete()
+        return result
