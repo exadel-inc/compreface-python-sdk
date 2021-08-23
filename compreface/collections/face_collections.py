@@ -18,7 +18,6 @@ from compreface.common.typed_dict import AllOptionsDict, ExpandedOptionsDict, De
 from ..use_cases import (
     AddExampleOfSubject,
     AddSubject,
-    ListOfAllSavedSubjects,
     DeleteAllExamplesOfSubjectByName,
     DeleteSubjectByName,
     DeleteAllSubjects,
