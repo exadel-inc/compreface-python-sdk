@@ -78,4 +78,4 @@ class SubjectClient(ClientRequest):
     def delete(self, subject: str = '') -> dict:
         url: str = self.url + '/' + subject if subject else self.url
         result = requests.delete(url, headers=self.headers)
-        return result.json() if result.status_code != 200 else result
+        return result.json()
