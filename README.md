@@ -7,6 +7,10 @@ CompreFace Python SDK makes face recognition into your application even easier.
 - [Installation](#installation)
 - [Usage](#usage)
     - [Initialization](#initialization)
+    - [Example Add a Subject](#example-add-a-subject)
+    - [Example Rename a Subject](#example-rename-a-subject)
+    - [Example Delete a Subject](#example-delete-a-subject)
+    - [Example Delete All Subjects](#example-delete-all-subjects)
     - [Example Add an Example of a Subject](#example-add-an-example-of-a-subject)
     - [Example Recognize Faces from a Given Image](#example-recognize-faces-from-a-given-image)
     - [Example List of All Saved Subjects](#example-list-of-all-saved-subjects)
@@ -19,6 +23,10 @@ CompreFace Python SDK makes face recognition into your application even easier.
     - [CompreFace Global Object](#compreFace-global-object)
     - [Options structure](#options-structure)
     - [Face Recognition Service](#face-recognition-service)
+      - [Add a Subject](#add-a-subject)
+      - [Rename a Subject](#rename-a-subject)
+      - [Delete a Subject](#delete-a-subject)
+      - [Delete All Subjects](#delete-all-subjects)
       - [Add an Example of a Subject](#add-an-example-of-a-subject)
       - [Recognize Faces from a Given Image](#recognize-faces-from-a-given-image)
       - [List of All Saved Subjects](#list-of-all-saved-subjects)
@@ -79,6 +87,45 @@ compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 recognition: RecognitionService = compre_face.init_face_recognition(API_KEY)
 
 face_collection: FaceCollection = recognition.get_face_collection()
+```
+
+### Example. Add a Subject
+
+Here is example that shows how to add a subject:
+
+```python
+subject: str = 'Jonathan Petit'
+
+face_collection.add_subject_by_name(subject)
+```
+
+### Example. Rename a Subject
+
+Here is example that shows how to rename an existing subject:
+
+```python
+subject: str = 'Jonathan Petit'
+new_name: str = 'Andrew Petit'
+
+face_collection.update_subject_by_name(subject=subject, new_name=new_name)
+```
+
+### Example. Delete a Subject
+
+Here is example that shows how to delete an existing subject:
+
+```python
+subject: str = 'Jonathan Petit'
+
+face_collection.delete_subject_by_name(subject)
+```
+
+### Example. Delete All Subjects
+
+Here is example that shows how to delete al subjects:
+
+```python
+face_collection.delete_all_subjects()
 ```
 
 ### Example. Add an Example of a Subject
@@ -342,6 +389,96 @@ When you upload an unknown face, the service returns the most similar faces to i
 Also, face recognition service supports verify endpoint to check if this person from face collection is the correct one.
 For more information, see [CompreFace page](https://github.com/exadel-inc/CompreFace).
 
+#### Add a Subject
+
+Create a new subject in Face Collection. Creating a subject is an optional step, you can [upload an example](#add-an-example-of-a-subject) without an existing subject, and a subject will be created automatically.
+```python
+FaceCollection.add_subject_by_name(subject)
+```
+
+| Argument           | Type   | Required | Notes                                                                   |
+| ------------------ | ------ | -------- | ------------------------------------------------------------------------|
+| subject            | string | required | is the name of the subject. It can be any string                        |
+
+Response body on success:
+
+```json
+{
+  "subject": "subject1"
+}
+```
+
+| Element  | Type   | Description                |
+| -------- | ------ | -------------------------- |
+| subject  | string | is the name of the subject |
+
+#### Rename a Subject
+
+Rename existing subject. If a new subject name already exists, subjects are merged - all faces from the old subject name are reassigned to the subject with the new name, old subject removed.
+
+```python
+FaceCollection.update_subject_by_name(subject, new_name)
+```
+
+| Argument            | Type   | Required | Notes                                                                   |
+| ------------------  | ------ | -------- | ------------------------------------------------------------------------|
+| subject             | string | required | is the name of the subject that will be updated                         |
+| new_name            | string | required | is the name of the subject. It can be any string                        |
+
+Response body on success:
+
+```json
+{
+  "updated": "true|false"
+}
+```
+
+| Element  | Type    | Description                |
+| -------- | ------  | -------------------------- |
+| updated  | boolean | failed or success          |
+
+#### Delete a Subject
+
+Delete existing subject and all saved faces.
+```python
+FaceCollection.delete_subject_by_name(subject)
+```
+
+| Argument           | Type   | Required | Notes                                                                   |
+| ------------------ | ------ | -------- | ------------------------------------------------------------------------|
+| subject            | string | required | is the name of the subject.                                             |
+
+Response body on success:
+
+```json
+{
+  "subject": "subject1"
+}
+```
+
+| Element  | Type   | Description                |
+| -------- | ------ | -------------------------- |
+| subject  | string | is the name of the subject |
+
+#### Delete All Subjects
+
+Delete all existing subjects and all saved faces.
+```python
+FaceCollection.delete_all_subjects()
+```
+
+Response body on success:
+
+```json
+{
+  "deleted": "<count>"
+}
+```
+
+| Element  | Type    | Description                |
+| -------- | ------  | -------------------------- |
+| deleted  | integer | number of deleted subjects |
+
 #### Add an Example of a Subject
 
 This creates an example of the subject by saving images. You can add as many images as you want to train the system.
@@ -370,7 +507,7 @@ Response body on success:
 | image_id | UUID   | UUID of uploaded image     |
 | subject  | string | Subject of the saved image |
 
-### Recognize Faces from a Given Image
+#### Recognize Faces from a Given Image
 
 Recognizes faces from the uploaded image.
 
@@ -445,7 +582,7 @@ Response body on success:
 | plugins_versions           | object  | contains information about plugin versions                                                                                                                  |
 
 
-### List of All Saved Subjects
+#### List of All Saved Subjects
 
 To retrieve a list of subjects saved in a Face Collection:
 
@@ -472,7 +609,7 @@ Response body on success:
 | image_id | UUID   | UUID of the face                                                  |
 | subject  | string | <subject> of the person, whose picture was saved for this api key |
 
-### Delete All Examples of the Subject by Name
+#### Delete All Examples of the Subject by Name
 
 To delete all image examples of the <subject>:
 
@@ -501,7 +638,7 @@ Response body on success:
 | image_id | UUID   | UUID of the removed face                                          |
 | subject  | string | <subject> of the person, whose picture was saved for this api key |
 
-### Delete an Example of the Subject by ID
+#### Delete an Example of the Subject by ID
 
 To delete an image by ID:
 
@@ -526,7 +663,7 @@ Response body on success:
 | image_id | UUID   | UUID of the removed face                                          |
 | subject  | string | <subject> of the person, whose picture was saved for this api key |
 
-### Verify Faces from a Given Image
+#### Verify Faces from a Given Image
 
 ```python
 FaceCollection.verify(image_path, image_id, options)
