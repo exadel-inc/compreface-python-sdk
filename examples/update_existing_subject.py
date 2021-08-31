@@ -28,7 +28,7 @@ recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_
 
 subject_collection: SubjectCollection = recognition.get_subject_collection()
 
-subject: str = 'Test Subject 1'
+subject: str = 'Test Subject'
 new_name: str = 'Updated Subject'
 
 print(subject_collection.update(subject, new_name))
