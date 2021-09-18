@@ -47,13 +47,13 @@ Before using our SDK make sure you have installed CompreFace and Python on your 
 
 | CompreFace Python SDK version | CompreFace 0.5.x | CompreFace 0.6.x |
 | ------------------------------| ---------------- | ---------------- | 
-| 0.1.0                         | ✔                | +-               | 
-| 0.6.x                         | +-               | ✔                | 
+| 0.1.0                         | ✔                | :yellow_circle:  | 
+| 0.6.x                         | :yellow_circle:  | ✔                | 
 
 Explanation:
 
 * ✔  SDK supports all functionality from CompreFace. 
-* +-  SDK works with this CompreFace version. 
+* :yellow_circle:  SDK works with this CompreFace version. 
 In case if CompreFace version is newer - SDK won't support new features of CompreFace. In case if CompreFace version is older - new SDK features will fail.
 * ✘ There are major backward compatibility issues. It is not recommended to use these versions together
 
