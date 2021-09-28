@@ -74,7 +74,7 @@ class RecognitionService(Service):
         """
         return self.face_collection
 
-    def get_subject_collection(self) -> SubjectCollection:
+    def get_subjects(self) -> SubjectCollection:
         """
         Get subject collection
         :return:
