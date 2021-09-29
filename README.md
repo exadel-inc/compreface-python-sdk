@@ -9,6 +9,7 @@ CompreFace Python SDK makes face recognition into your application even easier.
   - [Initialization](#initialization)
   - [Adding faces into a face collection](#adding-faces-into-a-face-collection)
   - [Recognition](#recognition)
+  - [Webcam demo](#webcam-demo)
 - [Reference](#reference)
   - [CompreFace Global Object](#compreFace-global-object)
     - [Methods](#methods)
@@ -120,6 +121,12 @@ image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 
 recognition.recognize(image_path=image_path)
 ```
+
+## Webcam demo
+Webcam demo shows how to use CompreFace Recognition and Detection services using Python SDK.
+In both cases, age, gender and mask plugins are applied.
+
+Follow this [link](/webcam_demo) to see the instructions.
 
 # Reference
 
