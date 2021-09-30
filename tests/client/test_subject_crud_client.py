@@ -19,7 +19,7 @@ import httpretty
 import requests
 from compreface.client import SubjectClient
 from compreface.config.api_list import SUBJECTS_CRUD_API
-from tests.client.const_config import DOMAIN, PORT, RECOGNIZE_API_KEY
+from tests.client.const_config import DOMAIN, PORT, DETECTION_API_KEY
 """
     Server configuration
 """
@@ -31,11 +31,11 @@ def test_get():
     httpretty.register_uri(
         httpretty.GET,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY},
+        headers={'x-api-key': DETECTION_API_KEY},
         body='{"subjects": ["Subject", "Subject2"]}'
     )
-    test_subject: SubjectClient = SubjectClient(RECOGNIZE_API_KEY, DOMAIN, PORT)
-    response: dict = requests.get(url=url, headers={'x-api-key': RECOGNIZE_API_KEY}).json()
+    test_subject: SubjectClient = SubjectClient(DETECTION_API_KEY, DOMAIN, PORT)
+    response: dict = requests.get(url=url, headers={'x-api-key': DETECTION_API_KEY}).json()
     test_response: dict = test_subject.get()
     assert response == test_response
 
@@ -45,7 +45,7 @@ def test_post():
     httpretty.register_uri(
         httpretty.POST,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY,
+        headers={'x-api-key': DETECTION_API_KEY,
                  'Content-Type': 'application/json'},
         body='{"subject": "Subject"}'
     )
@@ -53,10 +53,10 @@ def test_post():
     data = {'subject': 'Subject'}
 
     response: dict = requests.post(
-        url=url, data=json.dumps(data), headers={'x-api-key': RECOGNIZE_API_KEY,
+        url=url, data=json.dumps(data), headers={'x-api-key': DETECTION_API_KEY,
                                                  'Content-Type': 'application/json'}).json()
 
-    test_subject: SubjectClient = SubjectClient(RECOGNIZE_API_KEY, DOMAIN, PORT)
+    test_subject: SubjectClient = SubjectClient(DETECTION_API_KEY, DOMAIN, PORT)
     test_response: dict = test_subject.post({'subject': 'Subject'})
     assert response == test_response
 
@@ -66,7 +66,7 @@ def test_post_incorrect_response():
     httpretty.register_uri(
         httpretty.POST,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY,
+        headers={'x-api-key': DETECTION_API_KEY,
                  'Content-Type': 'application/json'},
         body='{"subject": "Subjectss"}'
     )
@@ -74,48 +74,57 @@ def test_post_incorrect_response():
     data = {'subject': 'Subjectss'}
 
     response: dict = requests.post(
-        url=url, data=json.dumps(data), headers={'x-api-key': RECOGNIZE_API_KEY,
+        url=url, data=json.dumps(data), headers={'x-api-key': DETECTION_API_KEY,
                                                  'Content-Type': 'application/json'}).json()
 
-    test_subject: SubjectClient = SubjectClient(RECOGNIZE_API_KEY, DOMAIN, PORT)
+    httpretty.register_uri(
+        httpretty.POST,
+        url,
+        headers={'x-api-key': DETECTION_API_KEY,
+                 'Content-Type': 'application/json'},
+        body='{"subject": "Subject"}'
+    )
+
+    test_subject: SubjectClient = SubjectClient(DETECTION_API_KEY, DOMAIN, PORT)
     test_response: dict = test_subject.post({'subject': 'Subject'})
     assert response != test_response
 
 
 @httpretty.activate(verbose=True, allow_net_connect=False)
 def test_delete():
+    test_url = url + '/Subject'
     httpretty.register_uri(
         httpretty.DELETE,
-        url + '/Subject',
-        headers={'x-api-key': RECOGNIZE_API_KEY,
+        test_url,
+        headers={'x-api-key': DETECTION_API_KEY,
                  'Content-Type': 'application/json'},
         body='{"subject": "Subject"}'
     )
 
-    response = requests.delete(
-        url=url, headers={'x-api-key': RECOGNIZE_API_KEY,
-                          'Content-Type': 'application/json'})
+    response: dict = requests.delete(url=test_url,
+                                     headers={'x-api-key': DETECTION_API_KEY,
+                                              'Content-Type': 'application/json'}).json()
 
-    test_subject: SubjectClient = SubjectClient(RECOGNIZE_API_KEY, DOMAIN, PORT)
-    test_response = test_subject.delete("Subject")
+    test_subject: SubjectClient = SubjectClient(DETECTION_API_KEY, DOMAIN, PORT)
+    test_response: dict = test_subject.delete("Subject")
     assert response == test_response
 
 
 @httpretty.activate(verbose=True, allow_net_connect=False)
 def test_put():
+    test_url = url + '/Subject'
     httpretty.register_uri(
         httpretty.PUT,
-        url + '/Subject',
-        headers={'x-api-key': RECOGNIZE_API_KEY,
+        test_url,
+        headers={'x-api-key': DETECTION_API_KEY,
                  'Content-Type': 'application/json'},
         body='{"subject": "NewSubject"}'
     )
 
     data = {"subject": "NewSubject"}
 
-    response: dict = requests.put(
-        url=url, data=json.dumps(data), headers={'x-api-key': RECOGNIZE_API_KEY}).json()
+    response: dict = requests.put(url=test_url, data=json.dumps(data), headers={'x-api-key': DETECTION_API_KEY}).json()
 
-    test_subject: SubjectClient = SubjectClient(RECOGNIZE_API_KEY, DOMAIN, PORT)
+    test_subject: SubjectClient = SubjectClient(DETECTION_API_KEY, DOMAIN, PORT)
     test_response: dict = test_subject.put({"subject": "NewSubject", "api_endpoint": "Subject"})
     assert response == test_response
