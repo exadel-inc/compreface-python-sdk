@@ -121,7 +121,7 @@ class FaceCollection:
         return self.verify_face_from_image.execute(request, pass_dict(options, ExpandedOptionsDict) if options == {} else options)
 
 
-class SubjectCollection:
+class Subjects:
     def __init__(self, api_key: str, domain: str, port: str, options: AllOptionsDict = {}):
         """Init service with define API Key"""
         self.available_services = []

@@ -16,18 +16,18 @@
 
 from compreface import CompreFace
 from compreface.service import RecognitionService
-from compreface.collections import SubjectCollection
+from compreface.collections import Subjects
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-RECOGNITION_API_KEY: str = 'b97fbc0a-518a-4b1d-a93a-581b1d3814cc'
+RECOGNITION_API_KEY: str = '00000000-0000-0000-0000-000000000002'
 
 compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
 recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-subject_collection: SubjectCollection = recognition.get_subject_collection()
+subjects: Subjects = recognition.get_subjects()
 
 subject: str = 'Test Subject'
 
-print(subject_collection.delete(subject))
+print(subjects.delete(subject))
