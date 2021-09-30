@@ -14,4 +14,4 @@
     permissions and limitations under the License.
  """
 
-from .face_collections import FaceCollection
+from .face_collections import FaceCollection, Subjects

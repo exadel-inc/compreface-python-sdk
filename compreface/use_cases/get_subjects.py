@@ -14,24 +14,24 @@
     permissions and limitations under the License.
  """
 
-from compreface import CompreFace
-from compreface.service import VerificationService
+from dataclasses import dataclass
 
-DOMAIN: str = 'http://localhost'
-PORT: str = '8000'
-VERIFICATION_API_KEY: str = '5c765423-4192-4fe8-9c60-092f495a332a'
+from compreface.client.subject_client import SubjectClient
 
 
-compre_face: CompreFace = CompreFace(DOMAIN, PORT, {
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "face_plugins": "age,gender",
-    "status": "true"
-})
+class GetSubjects:
 
-verify: VerificationService = compre_face.init_face_verification(
-    VERIFICATION_API_KEY)
+    @dataclass
+    class Request:
+        pass
 
-image_path: str = 'common/jonathan-petit-unsplash.jpg'
+    def __init__(self, domain: str, port: str, api_key: str):
+        self.subject_client = SubjectClient(
+            api_key=api_key,
+            domain=domain,
+            port=port
+        )
 
-print(verify.verify(image_path, image_path))
+    def execute(self) -> dict:
+        result: dict = self.subject_client.get()
+        return result

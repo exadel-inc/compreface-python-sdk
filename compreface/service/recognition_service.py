@@ -18,10 +18,8 @@ from compreface.common.typed_dict import AllOptionsDict
 from typing import List
 
 from ..common import Service
-from ..collections import FaceCollection
-from ..use_cases import (
-    RecognizeFaceFromImage
-)
+from ..collections import FaceCollection, Subjects
+from ..use_cases import RecognizeFaceFromImage
 
 
 class RecognitionService(Service):
@@ -37,6 +35,12 @@ class RecognitionService(Service):
             api_key=api_key
         )
         self.face_collection: FaceCollection = FaceCollection(
+            domain=domain,
+            port=port,
+            api_key=api_key,
+            options=options
+        )
+        self.subjects: Subjects = Subjects(
             domain=domain,
             port=port,
             api_key=api_key,
@@ -69,3 +73,10 @@ class RecognitionService(Service):
         :return:
         """
         return self.face_collection
+
+    def get_subjects(self) -> Subjects:
+        """
+        Get subjects
+        :return:
+        """
+        return self.subjects

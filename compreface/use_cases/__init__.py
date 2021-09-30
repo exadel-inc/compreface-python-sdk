@@ -21,3 +21,8 @@ from .list_of_all_saved_subjects import ListOfAllSavedSubjects
 from .recognize_face_from_image import RecognizeFaceFromImage
 from .verification_face_from_image import VerificationFaceFromImage
 from .detect_face_from_image import DetectFaceFromImage
+from .add_subject import AddSubject
+from .get_subjects import GetSubjects
+from .update_subject import UpdateSubject
+from .delete_subject_by_name import DeleteSubjectByName
+from .delete_all_subjects import DeleteAllSubjects

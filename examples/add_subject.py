@@ -15,23 +15,19 @@
  """
 
 from compreface import CompreFace
-from compreface.service import VerificationService
+from compreface.service import RecognitionService
+from compreface.collections import Subjects
 
 DOMAIN: str = 'http://localhost'
 PORT: str = '8000'
-VERIFICATION_API_KEY: str = '5c765423-4192-4fe8-9c60-092f495a332a'
+RECOGNITION_API_KEY: str = '00000000-0000-0000-0000-000000000002'
 
+compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
-compre_face: CompreFace = CompreFace(DOMAIN, PORT, {
-    "limit": 0,
-    "det_prob_threshold": 0.8,
-    "face_plugins": "age,gender",
-    "status": "true"
-})
+recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-verify: VerificationService = compre_face.init_face_verification(
-    VERIFICATION_API_KEY)
+subjects: Subjects = recognition.get_subjects()
 
-image_path: str = 'common/jonathan-petit-unsplash.jpg'
+subject: str = 'Test Subject'
 
-print(verify.verify(image_path, image_path))
+print(subjects.add(subject))

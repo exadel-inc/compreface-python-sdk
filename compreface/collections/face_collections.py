@@ -17,10 +17,15 @@
 from compreface.common.typed_dict import AllOptionsDict, ExpandedOptionsDict, DetProbOptionsDict, pass_dict
 from ..use_cases import (
     AddExampleOfSubject,
-    ListOfAllSavedSubjects,
+    AddSubject,
     DeleteAllExamplesOfSubjectByName,
+    DeleteSubjectByName,
+    DeleteAllSubjects,
     DeleteExampleById,
-    VerificationFaceFromImage
+    GetSubjects,
+    UpdateSubject,
+    VerificationFaceFromImage,
+    ListOfAllSavedSubjects
 )
 
 
@@ -56,6 +61,13 @@ class FaceCollection:
             api_key=api_key
         )
 
+    def list(self) -> dict:
+        """
+        Get list of collections
+        :return:
+        """
+        return self.list_of_all_saved_subjects.execute()
+
     def add(self, image_path: str, subject: str, options: DetProbOptionsDict = {}) -> dict:
         """
         Add example to collection
@@ -70,12 +82,17 @@ class FaceCollection:
         )
         return self.add_example.execute(request, pass_dict(options, DetProbOptionsDict) if options == {} else options)
 
-    def list(self) -> dict:
+    def delete(self, image_id: str) -> dict:
         """
-        Get list of collections
+        Delete example by Id
+        :param image_id:
         :return:
         """
-        return self.list_of_all_saved_subjects.execute()
+        request = DeleteExampleById.Request(
+            api_key=self.api_key,
+            image_id=image_id
+        )
+        return self.delete_all_examples_by_id.execute(request)
 
     def delete_all(self, subject: str) -> dict:
         """
@@ -88,18 +105,6 @@ class FaceCollection:
             subject=subject
         )
         return self.delete_all_examples_of_subject_by_name.execute(request)
-
-    def delete(self, image_id: str) -> dict:
-        """
-        Delete example by Id
-        :param image_id:
-        :return:
-        """
-        request = DeleteExampleById.Request(
-            api_key=self.api_key,
-            image_id=image_id
-        )
-        return self.delete_all_examples_by_id.execute(request)
 
     def verify(self, image_path: str, image_id: str, options: ExpandedOptionsDict = {}) -> dict:
         """
@@ -114,3 +119,85 @@ class FaceCollection:
             image_id=image_id
         )
         return self.verify_face_from_image.execute(request, pass_dict(options, ExpandedOptionsDict) if options == {} else options)
+
+
+class Subjects:
+    def __init__(self, api_key: str, domain: str, port: str, options: AllOptionsDict = {}):
+        """Init service with define API Key"""
+        self.available_services = []
+        self.api_key = api_key
+        self.options = options
+        self.add_subject: AddSubject = AddSubject(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+        self.update_subject: UpdateSubject = UpdateSubject(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+        self.delete_subject: DeleteSubjectByName = DeleteSubjectByName(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+        self.delete_all_subjects: DeleteAllSubjects = DeleteAllSubjects(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+        self.list_of_all_saved_subjects: GetSubjects = GetSubjects(
+            domain=domain,
+            port=port,
+            api_key=api_key
+        )
+
+    def list(self) -> dict:
+        """
+        Get list of subjects
+        :return:
+        """
+        return self.list_of_all_saved_subjects.execute()
+
+    def add(self, subject: str) -> dict:
+        """
+        Add subject
+        :param subject:
+        :return:
+        """
+        request = AddSubject.Request(
+            subject=subject
+        )
+        return self.add_subject.execute(request)
+
+    def update(self, subject: str, new_name: str) -> dict:
+        """
+        Update subject by name
+        :param subject:
+        :param new_name:
+        :return:
+        """
+        request = UpdateSubject.Request(
+            subject=new_name,
+            api_endpoint=subject
+        )
+        return self.update_subject.execute(request)
+
+    def delete(self, subject: str) -> dict:
+        """
+        Delete subject by name
+        :param subject:
+        :return:
+        """
+        request = DeleteSubjectByName.Request(
+            subject=subject
+        )
+        return self.delete_subject.execute(request)
+
+    def delete_all(self) -> dict:
+        """
+        Delete all subjects
+        :return:
+        """
+        return self.delete_all_subjects.execute()

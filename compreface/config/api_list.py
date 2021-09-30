@@ -19,6 +19,7 @@ RECOGNITION_ROOT_API: str = '/api/v1/recognition'
 
 RECOGNIZE_API: str = RECOGNITION_ROOT_API + '/recognize'
 RECOGNIZE_CRUD_API: str = RECOGNITION_ROOT_API + '/faces'
+SUBJECTS_CRUD_API: str = RECOGNITION_ROOT_API + '/subjects'
 
 DETECTION_API: str = '/api/v1/detection/detect'
 
