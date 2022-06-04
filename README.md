@@ -252,7 +252,7 @@ class AllOptionsDict(ExpandedOptionsDict):
 ```
 | Option              | Type    | Notes                                     |
 | --------------------| ------  | ----------------------------------------- |
-| det_prob_threshold  | string  | minimum required confidence that a recognized face is actually a face. Value is between 0.0 and 1.0 |
+| det_prob_threshold  | float   | minimum required confidence that a recognized face is actually a face. Value is between 0.0 and 1.0 |
 | limit               | integer | maximum number of faces on the image to be recognized. It recognizes the biggest faces first. Value of 0 represents no limit. Default value: 0       |
 | prediction_count    | integer | maximum number of subject predictions per face. It returns the most similar subjects. Default value: 1    |
 | face_plugins        | string  | comma-separated slugs of face plugins. If empty, no additional information is returned. [Learn more](https://github.com/exadel-inc/CompreFace/tree/master/docs/Face-services-and-plugins.md)    |
