@@ -22,13 +22,12 @@ from ..common import ClientRequest
 
 
 class SubjectClient(ClientRequest):
-
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
         self.client_url: str = SUBJECTS_CRUD_API
         self.api_key: str = api_key
-        self.url: str = domain + ':' + port + self.client_url
-        self.headers = {'Content-Type': 'application/json', 'x-api-key': api_key}
+        self.url: str = domain + ":" + port + self.client_url
+        self.headers = {"Content-Type": "application/json", "x-api-key": api_key}
 
     """
         GET request for get all subjects. 
@@ -49,7 +48,7 @@ class SubjectClient(ClientRequest):
         :return: json with this subject from server.
     """
 
-    def post(self, subject: dict = '') -> dict:
+    def post(self, subject: dict = "") -> dict:
         url: str = self.url
         result = requests.post(url, data=json.dumps(subject), headers=self.headers)
         return result.json()
@@ -62,8 +61,8 @@ class SubjectClient(ClientRequest):
         :return: json from server.
     """
 
-    def put(self, request: dict = '') -> dict:
-        url: str = self.url + '/' + request.get('api_endpoint')
+    def put(self, request: dict = "") -> dict:
+        url: str = self.url + "/" + request.get("api_endpoint")
         result = requests.put(url, data=json.dumps(request), headers=self.headers)
         return result.json()
 
@@ -75,7 +74,7 @@ class SubjectClient(ClientRequest):
         :return: json from server.
     """
 
-    def delete(self, subject: str = '') -> dict:
-        url: str = self.url + '/' + subject if subject else self.url
+    def delete(self, subject: str = "") -> dict:
+        url: str = self.url + "/" + subject if subject else self.url
         result = requests.delete(url, headers=self.headers)
         return result.json()

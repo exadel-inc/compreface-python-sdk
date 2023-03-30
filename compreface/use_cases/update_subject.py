@@ -20,18 +20,13 @@ from compreface.client.subject_client import SubjectClient
 
 
 class UpdateSubject:
-
     @dataclass
     class Request:
         subject: str
         api_endpoint: str
 
     def __init__(self, domain: str, port: str, api_key: str):
-        self.subject_client = SubjectClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
-        )
+        self.subject_client = SubjectClient(api_key=api_key, domain=domain, port=port)
 
     def execute(self, request: Request) -> dict:
         result: dict = self.subject_client.put(asdict(request))

@@ -23,14 +23,14 @@ from ..common import ClientRequest
 
 class RecognizeFaceFromImageClient(ClientRequest):
     """
-        Recognize faces in image. It uses image path for encode and send to CompreFace server.
+    Recognize faces in image. It uses image path for encode and send to CompreFace server.
     """
 
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
         self.client_url: str = RECOGNIZE_API
         self.api_key: str = api_key
-        self.url: str = domain + ':' + port + self.client_url
+        self.url: str = domain + ":" + port + self.client_url
 
     def get(self):
         pass
@@ -44,7 +44,7 @@ class RecognizeFaceFromImageClient(ClientRequest):
         :return: json from server.
     """
 
-    def post(self, image: str = '' or bytes, options: AllOptionsDict = {}):
+    def post(self, image: str = "" or bytes, options: AllOptionsDict = {}):
         url: str = self.url + "?"
 
         # Validation loop and adding fields to the url.
@@ -52,14 +52,17 @@ class RecognizeFaceFromImageClient(ClientRequest):
             # Checks fields with necessary rules.
             # key - key field by options.
             check_fields_by_name(key, options[key])
-            url += '&' + key + "=" + str(options[key])
+            url += "&" + key + "=" + str(options[key])
 
         # Encoding image from path and encode in multipart for sending to the server.
         m = multipart_constructor(image)
 
         # Sending encode image for recognize faces.
-        result = requests.post(url, data=m, headers={'Content-Type': m.content_type,
-                                                     'x-api-key': self.api_key})
+        result = requests.post(
+            url,
+            data=m,
+            headers={"Content-Type": m.content_type, "x-api-key": self.api_key},
+        )
         return result.json()
 
     def put(self):

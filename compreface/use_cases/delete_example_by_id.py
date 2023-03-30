@@ -19,7 +19,6 @@ from ..client import DeleteExampleByIdClient
 
 
 class DeleteExampleById:
-
     @dataclass
     class Request:
         api_key: str
@@ -27,9 +26,7 @@ class DeleteExampleById:
 
     def __init__(self, domain: str, port: str, api_key: str):
         self.delete_example_by_id = DeleteExampleByIdClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
+            api_key=api_key, domain=domain, port=port
         )
 
     def execute(self, request: Request):

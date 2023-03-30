@@ -17,18 +17,21 @@
 import requests
 
 from compreface.common.multipart_constructor import multipart_constructor
-from compreface.common.typed_dict import DetProbOptionsDict, check_fields_by_name
+from compreface.common.typed_dict import (
+    DetProbOptionsDict,
+    SavedObjectOptions,
+    check_fields_by_name,
+)
 from compreface.config.api_list import RECOGNIZE_CRUD_API
 from ..common import ClientRequest
 
 
 class AddExampleOfSubjectClient(ClientRequest):
-
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
         self.client_url: str = RECOGNIZE_CRUD_API
         self.api_key: str = api_key
-        self.url: str = domain + ':' + port + self.client_url
+        self.url: str = domain + ":" + port + self.client_url
 
     """
         GET request for get all subjects. 
@@ -36,9 +39,14 @@ class AddExampleOfSubjectClient(ClientRequest):
         :return: json with subjects from server.
     """
 
-    def get(self) -> dict:
-        url: str = self.url
-        result = requests.get(url, headers={'x-api-key': self.api_key})
+    def get(self, options: SavedObjectOptions = {}) -> dict:
+        url: str = self.url + "?"
+        for key in options.keys():
+            # Checks fields with necessary rules.
+            # key - key field by options.
+            check_fields_by_name(key, options[key])
+            url += "&" + key + "=" + str(options[key])
+        result = requests.get(url, headers={"x-api-key": self.api_key})
         return result.json()
 
     """
@@ -51,17 +59,25 @@ class AddExampleOfSubjectClient(ClientRequest):
         :return: json with this subject from server.
     """
 
-    def post(self, image: str = '' or bytes, subject: str = '', options: DetProbOptionsDict = {}) -> dict:
-        url: str = self.url + '?subject=' + subject
+    def post(
+        self,
+        image: str = "" or bytes,
+        subject: str = "",
+        options: DetProbOptionsDict = {},
+    ) -> dict:
+        url: str = self.url + "?subject=" + subject
         # Validation loop and adding fields to the url.
         for key in options.keys():
             # Checks fields with necessary rules.
             # key - key field by options.
             check_fields_by_name(key, options[key])
-            url += '&' + key + "=" + str(options[key])
+            url += "&" + key + "=" + str(options[key])
         m = multipart_constructor(image)
-        result = requests.post(url, data=m, headers={'Content-Type': m.content_type,
-                                                     'x-api-key': self.api_key})
+        result = requests.post(
+            url,
+            data=m,
+            headers={"Content-Type": m.content_type, "x-api-key": self.api_key},
+        )
         return result.json()
 
     def put(self):
@@ -75,7 +91,7 @@ class AddExampleOfSubjectClient(ClientRequest):
         :return: json from server.
     """
 
-    def delete(self, subject: str = ''):
-        url: str = self.url + '?subject=' + subject
-        result = requests.delete(url, headers={'x-api-key': self.api_key})
+    def delete(self, subject: str = ""):
+        url: str = self.url + "?subject=" + subject
+        result = requests.delete(url, headers={"x-api-key": self.api_key})
         return result.json()

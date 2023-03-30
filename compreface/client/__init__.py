@@ -21,3 +21,6 @@ from .recognize_face_from_image import RecognizeFaceFromImageClient
 from .detect_face_from_image import DetectFaceFromImageClient
 from .verify_face_from_image import VerifyFaceFromImageClient
 from .subject_client import SubjectClient
+from .recognize_face_from_embeddings import RecognizeFaceFromEmbeddingClient
+from .verification_face_from_embeddings import VerificationFaceFromEmbeddingClient
+from .verify_face_from_embeddings import VerifyFaceFromEmbeddingClient

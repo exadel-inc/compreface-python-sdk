@@ -17,6 +17,7 @@
 from .add_example_of_subject import AddExampleOfSubject
 from .delete_all_examples_of_subject_by_name import DeleteAllExamplesOfSubjectByName
 from .delete_example_by_id import DeleteExampleById
+from .delete_example_by_ids import DeleteExampleByIds
 from .list_of_all_saved_subjects import ListOfAllSavedSubjects
 from .recognize_face_from_image import RecognizeFaceFromImage
 from .verification_face_from_image import VerificationFaceFromImage
@@ -26,3 +27,6 @@ from .get_subjects import GetSubjects
 from .update_subject import UpdateSubject
 from .delete_subject_by_name import DeleteSubjectByName
 from .delete_all_subjects import DeleteAllSubjects
+from .verify_face_from_embedding import VerifyFaceFromEmbedding
+from .recognize_face_from_embedding import RecognizeFaceFromEmbedding
+from .verification_face_from_embedding import VerificationFaceFromEmbedding

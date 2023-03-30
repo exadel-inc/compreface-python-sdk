@@ -20,7 +20,6 @@ from ..client import VerificationFaceFromImageClient
 
 
 class VerificationFaceFromImage:
-
     @dataclass
     class Request:
         api_key: str
@@ -29,12 +28,11 @@ class VerificationFaceFromImage:
 
     def __init__(self, domain: str, port: str, api_key: str):
         self.verify_face_from_image = VerificationFaceFromImageClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
+            api_key=api_key, domain=domain, port=port
         )
 
     def execute(self, request: Request, options: ExpandedOptionsDict = {}):
-        result: dict = self.verify_face_from_image.post(request.image_path,
-                                                        request.image_id, options)
+        result: dict = self.verify_face_from_image.post(
+            request.image_path, request.image_id, options
+        )
         return result

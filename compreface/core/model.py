@@ -16,11 +16,7 @@
 
 from compreface.common.typed_dict import AllOptionsDict
 from typing import Optional
-from ..service import (
-    RecognitionService,
-    VerificationService,
-    DetectionService
-)
+from ..service import RecognitionService, VerificationService, DetectionService
 
 
 class CompreFace(object):
@@ -66,10 +62,9 @@ class CompreFace(object):
         :param api_key:
         :return:
         """
-        self.recognition = RecognitionService(api_key=api_key,
-                                              domain=self.domain,
-                                              port=self.port,
-                                              options=self.options)
+        self.recognition = RecognitionService(
+            api_key=api_key, domain=self.domain, port=self.port, options=self.options
+        )
         return self.recognition
 
     def init_face_verification(self, api_key: str) -> VerificationService:
@@ -78,10 +73,9 @@ class CompreFace(object):
         :param api_key:
         :return:
         """
-        self.verification = VerificationService(api_key=api_key,
-                                                domain=self.domain,
-                                                port=self.port,
-                                                options=self.options)
+        self.verification = VerificationService(
+            api_key=api_key, domain=self.domain, port=self.port, options=self.options
+        )
         return self.verification
 
     def init_face_detection(self, api_key: str) -> DetectionService:
@@ -90,8 +84,7 @@ class CompreFace(object):
         :param api_key:
         :return:
         """
-        self.detection = DetectionService(api_key=api_key,
-                                          domain=self.domain,
-                                          port=self.port,
-                                          options=self.options)
+        self.detection = DetectionService(
+            api_key=api_key, domain=self.domain, port=self.port, options=self.options
+        )
         return self.detection

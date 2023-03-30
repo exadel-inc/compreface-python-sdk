@@ -20,7 +20,6 @@ from ..client import RecognizeFaceFromImageClient
 
 
 class RecognizeFaceFromImage:
-
     @dataclass
     class Request:
         api_key: str
@@ -28,12 +27,9 @@ class RecognizeFaceFromImage:
 
     def __init__(self, domain: str, port: str, api_key: str):
         self.recognize_face_from_image = RecognizeFaceFromImageClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
+            api_key=api_key, domain=domain, port=port
         )
 
     def execute(self, request: Request, options: AllOptionsDict = {}) -> dict:
-        result: dict = self.recognize_face_from_image.post(
-            request.image_path, options)
+        result: dict = self.recognize_face_from_image.post(request.image_path, options)
         return result

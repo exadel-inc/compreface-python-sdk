@@ -14,7 +14,9 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.multipart_constructor import multipart_constructor_with_two_images
+from compreface.common.multipart_constructor import (
+    multipart_constructor_with_two_images,
+)
 import requests
 from compreface.config.api_list import VERIFICATION_API
 from compreface.common.typed_dict import ExpandedOptionsDict, check_fields_by_name
@@ -23,15 +25,15 @@ from compreface.common.client import ClientRequest
 
 class VerifyFaceFromImageClient(ClientRequest):
     """
-        Verify face in image. It uses source and target images for encode and send to CompreFace 
-        server with validation by image id.
+    Verify face in image. It uses source and target images for encode and send to CompreFace
+    server with validation by image id.
     """
 
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
         self.client_url: str = VERIFICATION_API
         self.api_key: str = api_key
-        self.url: str = domain + ':' + port + self.client_url
+        self.url: str = domain + ":" + port + self.client_url
 
     def get(self):
         pass
@@ -47,25 +49,29 @@ class VerifyFaceFromImageClient(ClientRequest):
         :return: json from server.
     """
 
-    def post(self,
-             source_image: str = '' or bytes,
-             target_image: str = '' or bytes,
-             options: ExpandedOptionsDict = {}) -> dict:
-
-        url: str = self.url + '/verify?'
+    def post(
+        self,
+        source_image: str = "" or bytes,
+        target_image: str = "" or bytes,
+        options: ExpandedOptionsDict = {},
+    ) -> dict:
+        url: str = self.url + "/verify?"
         # Validation loop and adding fields to the url.
         for key in options.keys():
             # Checks fields with necessary rules.
             # key - key field by options.
             check_fields_by_name(key, options[key])
-            url += '&' + key + "=" + str(options[key])
+            url += "&" + key + "=" + str(options[key])
 
         # Encoding image from path and encode in multipart for sending to the server.
         m = multipart_constructor_with_two_images(source_image, target_image)
 
         # Sending encode image for verify face.
-        result = requests.post(url, data=m, headers={'Content-Type': m.content_type,
-                                                     'x-api-key': self.api_key})
+        result = requests.post(
+            url,
+            data=m,
+            headers={"Content-Type": m.content_type, "x-api-key": self.api_key},
+        )
         return result.json()
 
     def put(self):

@@ -23,20 +23,30 @@ from ..common import ClientRequest
 class DeleteExampleByIdClient(ClientRequest):
 
     """
-        Delete example by id from image_id.
+    Delete example by id from image_id.
     """
 
     def __init__(self, api_key: str, domain: str, port: str):
         super().__init__()
         self.client_url: str = RECOGNIZE_CRUD_API
         self.api_key: str = api_key
-        self.url: str = domain + ':' + port + self.client_url
+        self.url: str = domain + ":" + port + self.client_url
 
     def get(self):
         pass
 
-    def post(self):
-        pass
+    """
+        POST request to delete several subject examples.
+        
+        :param image_id: UUID of the removing face.
+        
+        :return: json from server.
+    """
+
+    def post(self, image_ids: list = []):
+        url: str = self.url + "/delete"
+        result = requests.post(url, json=image_ids, headers={"x-api-key": self.api_key})
+        return result.json()
 
     def put(self):
         pass
@@ -49,7 +59,7 @@ class DeleteExampleByIdClient(ClientRequest):
         :return: json from server.
     """
 
-    def delete(self, image_id: str = ''):
-        url: str = self.url + '/' + image_id
-        result = requests.delete(url, headers={'x-api-key': self.api_key})
+    def delete(self, image_id: str = ""):
+        url: str = self.url + "/" + image_id
+        result = requests.delete(url, headers={"x-api-key": self.api_key})
         return result.json()
