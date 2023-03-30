@@ -53,10 +53,11 @@ Before using our SDK make sure you have installed CompreFace and Python on your 
 
 ## CompreFace compatibility matrix
 
-| CompreFace Python SDK version | CompreFace 0.5.x | CompreFace 0.6.x |
-| ------------------------------| ---------------- | ---------------- | 
-| 0.1.0                         | ✔                | :yellow_circle:  | 
-| 0.6.x                         | :yellow_circle:  | ✔                | 
+| CompreFace Python SDK version | CompreFace 0.5.x | CompreFace 0.6.x | CompreFace 1.2.x |
+| ------------------------------| ---------------- | ---------------- | ---------------- |
+| 0.1.0                         | ✔                | :yellow_circle:  | :yellow_circle:  |
+| 0.6.x                         | :yellow_circle:  | ✔                | :yellow_circle:  |
+| 1.2.x                         | :yellow_circle:  | :yellow_circle:  | ✔                |
 
 Explanation:
 
