@@ -15,12 +15,14 @@
  """
 
 from compreface import CompreFace
-from compreface.service import VerificationService
+from compreface.service import VerificationService, RecognitionService
 
 DOMAIN: str = "http://localhost"
 PORT: str = "8000"
 VERIFICATION_API_KEY: str = "00000000-0000-0000-0000-000000000001"
+RECOGNITION_API_KEY: str = "00000000-0000-0000-0000-000000000002"
 
+IMAGE_ID = "43257797-fc3e-437e-ad3c-7f3c5bea6f1d"
 
 compre_face: CompreFace = CompreFace(
     DOMAIN,
@@ -28,13 +30,25 @@ compre_face: CompreFace = CompreFace(
     {
         "limit": 0,
         "det_prob_threshold": 0.8,
-        "face_plugins": "age,gender",
+        "face_plugins": "calculator",
         "status": "true",
     },
 )
 
 verify: VerificationService = compre_face.init_face_verification(VERIFICATION_API_KEY)
 
-image_path: str = "common/jonathan-petit-unsplash.jpg"
+recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-print(verify.verify_image(image_path, image_path))
+image_path: str = "examples/common/jonathan-petit-unsplash.jpg"
+
+result = recognition.recognize_image(image_path).get("result")
+if len(result) != 0:
+    last_result: dict = result[len(result) - 1]
+    embeddings: list = last_result.get("embedding", [])
+    print(
+        verify.verify_embedding(
+            source_embeddings=embeddings, targets_embeddings=[embeddings]
+        )
+    )
+else:
+    print("No embedding found")

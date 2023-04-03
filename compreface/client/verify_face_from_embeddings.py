@@ -49,9 +49,12 @@ class VerifyFaceFromEmbeddingClient(ClientRequest):
         # Sending an input source embedding.
         result = requests.post(
             url,
-            json={"targets": source_embeddings, "source": targets_embeddings},
+            json={"source": source_embeddings, "targets": targets_embeddings},
             headers={"x-api-key": self.api_key},
         )
+
+        result.raise_for_status()
+
         return result.json()
 
     def put(self):

@@ -25,11 +25,17 @@ RECOGNITION_API_KEY: str = "00000000-0000-0000-0000-000000000002"
 compre_face: CompreFace = CompreFace(
     DOMAIN,
     PORT,
-    {"limit": 0, "det_prob_threshold": 0.8, "prediction_count": 1, "status": "true"},
+    {
+        "limit": 0,
+        "det_prob_threshold": 0.8,
+        "prediction_count": 1,
+        "status": "true",
+        "face_plugins": "calculator",
+    },
 )
 
 recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-image_path: str = "common/jonathan-petit-unsplash.jpg"
+image_path: str = "examples/common/jonathan-petit-unsplash.jpg"
 
-print(recognition.recognize(image_path))
+print(recognition.recognize_image(image_path))

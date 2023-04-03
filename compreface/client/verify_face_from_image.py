@@ -72,6 +72,8 @@ class VerifyFaceFromImageClient(ClientRequest):
             data=m,
             headers={"Content-Type": m.content_type, "x-api-key": self.api_key},
         )
+        result.raise_for_status()
+
         return result.json()
 
     def put(self):

@@ -14,32 +14,25 @@
     permissions and limitations under the License.
  """
 
-from compreface.collections.face_collections import FaceCollection
 from compreface import CompreFace
 from compreface.service import RecognitionService
+from compreface.collections import FaceCollection
+
 
 DOMAIN: str = "http://localhost"
 PORT: str = "8000"
 RECOGNITION_API_KEY: str = "00000000-0000-0000-0000-000000000002"
 
-compre_face: CompreFace = CompreFace(
-    DOMAIN, PORT, {"limit": 0, "det_prob_threshold": 0.8, "status": "true"}
-)
+compre_face: CompreFace = CompreFace(DOMAIN, PORT)
 
 recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-image_path: str = "common/jonathan-petit-unsplash.jpg"
-
 face_collection: FaceCollection = recognition.get_face_collection()
 
-print(face_collection.list())
+faces: list = face_collection.list().get("faces")
 
-face: dict = next(
-    item
-    for item in face_collection.list().get("faces")
-    if item["subject"] == "Jonathan Petit"
-)
-
-image_id = face.get("image_id")
-
-print(face_collection.verify_image(image_path, image_id))
+if len(faces) != 0:
+    image_ids = [face.get("image_id") for face in faces]
+    print(face_collection.delete_multiple(image_ids))
+else:
+    print("No subject found")

@@ -14,7 +14,6 @@
     permissions and limitations under the License.
  """
 import requests
-
 from compreface.common.typed_dict import (
     PredictionCountOptionsDict,
     check_fields_by_name,
@@ -46,7 +45,7 @@ class RecognizeFaceFromEmbeddingClient(ClientRequest):
         :return: json from server.
     """
 
-    def post(self, embeddings: list = [], options: PredictionCountOptionsDict = {}):
+    def post(self, embeddings: list = [[]], options: PredictionCountOptionsDict = {}):
         url: str = self.url + "/recognize?"
 
         # Validation loop and adding fields to the url.
@@ -55,11 +54,13 @@ class RecognizeFaceFromEmbeddingClient(ClientRequest):
             # key - key field by options.
             check_fields_by_name(key, options[key])
             url += "&" + key + "=" + str(options[key])
-
         # Sending an input source embedding for recognize faces.
         result = requests.post(
-            url, json={"embeddings": embeddings}, headers={"x-api-key": self.api_key}
+            url,
+            json={"embeddings": embeddings},
+            headers={"x-api-key": self.api_key, "Content-Type": "application/json"},
         )
+        result.raise_for_status()
         return result.json()
 
     def put(self):

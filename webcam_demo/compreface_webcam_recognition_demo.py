@@ -181,7 +181,7 @@ class ThreadedCamera:
 
         _, im_buf_arr = cv2.imencode(".jpg", self.frame)
         byte_im = im_buf_arr.tobytes()
-        data = self.recognition.recognize(byte_im)
+        data = self.recognition.recognize_image(byte_im)
         self.results = data.get("result")
 
 

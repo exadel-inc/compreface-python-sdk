@@ -23,7 +23,7 @@ with open("README.md", "r") as fh:
 setup(
     name="compreface-sdk",
     packages=find_packages(exclude=("tests",)),
-    version="0.6.0",
+    version="1.2.0",
     license="Apache License 2.0",
     description="CompreFace Python SDK makes face recognition into your application even easier.",
     long_description=long_description,

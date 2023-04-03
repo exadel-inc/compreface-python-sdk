@@ -14,7 +14,6 @@
     permissions and limitations under the License.
  """
 
-from compreface.collections.face_collections import FaceCollection
 from compreface import CompreFace
 from compreface.service import RecognitionService
 
@@ -22,24 +21,32 @@ DOMAIN: str = "http://localhost"
 PORT: str = "8000"
 RECOGNITION_API_KEY: str = "00000000-0000-0000-0000-000000000002"
 
+
 compre_face: CompreFace = CompreFace(
-    DOMAIN, PORT, {"limit": 0, "det_prob_threshold": 0.8, "status": "true"}
+    DOMAIN,
+    PORT,
+    {
+        "limit": 0,
+        "det_prob_threshold": 0.8,
+        "prediction_count": 1,
+        "status": "true",
+        "face_plugins": "calculator",
+    },
 )
+
 
 recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-image_path: str = "common/jonathan-petit-unsplash.jpg"
+image_path: str = "examples/common/jonathan-petit-unsplash.jpg"
 
-face_collection: FaceCollection = recognition.get_face_collection()
-
-print(face_collection.list())
-
-face: dict = next(
-    item
-    for item in face_collection.list().get("faces")
-    if item["subject"] == "Jonathan Petit"
-)
-
-image_id = face.get("image_id")
-
-print(face_collection.verify_image(image_path, image_id))
+result = recognition.recognize_image(image_path).get("result")
+if len(result) != 0:
+    last_result: dict = result[len(result) - 1]
+    embeddings: list = last_result.get("embedding", [[]])
+    print(
+        recognition.recognize_embedding(
+            embeddings=[embeddings], options={"prediction_count": 1}
+        )
+    )
+else:
+    print("No embeddings found")

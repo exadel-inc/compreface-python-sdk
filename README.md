@@ -127,7 +127,7 @@ This code snippet shows how to recognize unknown face.
 ```python
 image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 
-recognition.recognize(image_path=image_path)
+recognition.recognize_image(image_path=image_path)
 ```
 
 ## Webcam demo
@@ -279,7 +279,7 @@ class AllOptionsDict(ExpandedOptionsDict):
 Example of face recognition with object:
 
 ```python
-recognition.recognize(image_path=image_path, options={
+recognition.recognize_image(image_path=image_path, options={
     "limit": 0,
     "det_prob_threshold": 0.8,
     "prediction_count": 1,
@@ -378,6 +378,8 @@ Response:
 | plugins_versions           | object  | contains information about plugin versions                                                                                                                  |
 
 ### Recognize Faces from a Given Image, Embedding
+
+*[Example](examples/recognize_face_from_embedding.py)*
 
 Determine similarities between input embeddings and embeddings within the Face Collection.
 
@@ -558,7 +560,7 @@ Response:
 
 
 #### Delete Multiple Examples
-
+*[Example](examples/delete_examples_by_ids.py)*
 To delete several subject examples
 
 ```python
@@ -666,7 +668,7 @@ Response:
 
 
 #### Verify Faces from a Given Image, Embedding
-
+*[Example](examples/verification_face_from_embedding.py)*
 ```python
 face_collection.verify_embeddings(embedding, image_id)
 ```
@@ -1038,7 +1040,7 @@ Response:
 | plugins_versions               | object  | contains information about plugin versions                       |
 
 ### Verify Embedding
-
+*[Example](examples/verify_face_from_embedding.py)*
 ```python
 verify.verify_embedding(source_embeddings, targets_embeddings)
 ```

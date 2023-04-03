@@ -28,11 +28,21 @@ compre_face: CompreFace = CompreFace(
 
 recognition: RecognitionService = compre_face.init_face_recognition(RECOGNITION_API_KEY)
 
-image_path: str = "common/jonathan-petit-unsplash.jpg"
+image_path: str = "examples/common/jonathan-petit-unsplash.jpg"
 
 face_collection: FaceCollection = recognition.get_face_collection()
 
 print(face_collection.list())
+
+result = recognition.recognize_image(
+    image_path,
+    options={
+        "limit": 0,
+        "det_prob_threshold": 0.8,
+        "face_plugins": "calculator",
+        "status": "true",
+    },
+).get("result")
 
 face: dict = next(
     item
@@ -42,4 +52,9 @@ face: dict = next(
 
 image_id = face.get("image_id")
 
-print(face_collection.verify_image(image_path, image_id))
+if len(result) != 0:
+    last_result: dict = result[len(result) - 1]
+    embeddings: list = last_result.get("embedding", [])
+    print(face_collection.verify_embeddings([embeddings], image_id))
+else:
+    print("No embedding found")
