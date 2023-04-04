@@ -75,6 +75,7 @@ def check_fields_by_name(name: str, value: Any):
                 and row.find("gender") == -1
                 and row.find("landmarks") == -1
                 and row.find("mask") == -1
+                and row.find("pose") == -1
             ):
                 raise IncorrectFieldException(
                     "face_plugins must be only contains calculator,age,gender,landmarks,mask. "
