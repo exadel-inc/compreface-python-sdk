@@ -20,17 +20,12 @@ from compreface.client.subject_client import SubjectClient
 
 
 class DeleteAllSubjects:
-
     @dataclass
     class Request:
         pass
 
     def __init__(self, domain: str, port: str, api_key: str):
-        self.add_subject = SubjectClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
-        )
+        self.add_subject = SubjectClient(api_key=api_key, domain=domain, port=port)
 
     def execute(self) -> dict:
         result: dict = self.add_subject.delete()

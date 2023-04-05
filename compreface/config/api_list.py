@@ -15,12 +15,15 @@
  """
 
 
-RECOGNITION_ROOT_API: str = '/api/v1/recognition'
+RECOGNITION_ROOT_API: str = "/api/v1/recognition"
 
-RECOGNIZE_API: str = RECOGNITION_ROOT_API + '/recognize'
-RECOGNIZE_CRUD_API: str = RECOGNITION_ROOT_API + '/faces'
-SUBJECTS_CRUD_API: str = RECOGNITION_ROOT_API + '/subjects'
+RECOGNIZE_API: str = RECOGNITION_ROOT_API + "/recognize"
+RECOGNIZE_CRUD_API: str = RECOGNITION_ROOT_API + "/faces"
+SUBJECTS_CRUD_API: str = RECOGNITION_ROOT_API + "/subjects"
+RECOGNIZE_EMBEDDINGS_API: str = RECOGNITION_ROOT_API + "/embeddings"
 
-DETECTION_API: str = '/api/v1/detection/detect'
+DETECTION_API: str = "/api/v1/detection/detect"
 
-VERIFICATION_API: str = '/api/v1/verification'
+VERIFICATION_API: str = "/api/v1/verification"
+
+VERIFICATION_EMBEDDINGS_API: str = VERIFICATION_API + "/embeddings"

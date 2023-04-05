@@ -3,7 +3,10 @@
 CompreFace Python SDK makes face recognition into your application even easier.
 
 # Table of content
+- [CompreFace Python SDK](#compreface-python-sdk)
+- [Table of content](#table-of-content)
 - [Requirements](#requirements)
+  - [CompreFace compatibility matrix](#compreface-compatibility-matrix)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Initialization](#initialization)
@@ -11,30 +14,34 @@ CompreFace Python SDK makes face recognition into your application even easier.
   - [Recognition](#recognition)
   - [Webcam demo](#webcam-demo)
 - [Reference](#reference)
-  - [CompreFace Global Object](#compreFace-global-object)
+  - [CompreFace Global Object](#compreface-global-object)
     - [Methods](#methods)
   - [Options structure](#options-structure)
   - [Face Recognition Service](#face-recognition-service)
     - [Recognize Faces from a Given Image](#recognize-faces-from-a-given-image)
+    - [Recognize Faces from a Given Image, Embedding](#recognize-faces-from-a-given-image-embedding)
     - [Get Face Collection](#get-face-collection)
       - [Add an Example of a Subject](#add-an-example-of-a-subject)
       - [List of All Saved Examples of the Subject](#list-of-all-saved-examples-of-the-subject)
       - [Delete All Examples of the Subject by Name](#delete-all-examples-of-the-subject-by-name)
       - [Delete an Example of the Subject by ID](#delete-an-example-of-the-subject-by-id)
+      - [Delete Multiple Examples](#delete-multiple-examples)
       - [Verify Faces from a Given Image](#verify-faces-from-a-given-image)
+      - [Verify Faces from a Given Image, Embedding](#verify-faces-from-a-given-image-embedding)
     - [Get Subjects](#get-subjects)
       - [Add a Subject](#add-a-subject)
       - [List Subjects](#list-subjects)
       - [Rename a Subject](#rename-a-subject)
       - [Delete a Subject](#delete-a-subject)
       - [Delete All Subjects](#delete-all-subjects)
-    - [Face Detection Service](#face-detection-service)
-      - [Detect](#detect)
-    - [Face Verification Service](#face-verification-service)
-      - [Verify](#verify)
+  - [Face Detection Service](#face-detection-service)
+    - [Detect](#detect)
+  - [Face Verification Service](#face-verification-service)
+    - [Verify Image](#verify-image)
+    - [Verify Embedding](#verify-embedding)
 - [Contributing](#contributing)
-    - [Report Bugs](#report-bugs)
-    - [Submit Feedback](#submit-feedback)
+  - [Report Bugs](#report-bugs)
+  - [Submit Feedback](#submit-feedback)
 - [License info](#license-info)
 
 # Requirements
@@ -46,10 +53,11 @@ Before using our SDK make sure you have installed CompreFace and Python on your 
 
 ## CompreFace compatibility matrix
 
-| CompreFace Python SDK version | CompreFace 0.5.x | CompreFace 0.6.x |
-| ------------------------------| ---------------- | ---------------- | 
-| 0.1.0                         | ✔                | :yellow_circle:  | 
-| 0.6.x                         | :yellow_circle:  | ✔                | 
+| CompreFace Python SDK version | CompreFace 0.5.x | CompreFace 0.6.x | CompreFace 1.2.x |
+| ------------------------------| ---------------- | ---------------- | ---------------- |
+| 0.1.0                         | ✔                | :yellow_circle:  | :yellow_circle:  |
+| 0.6.x                         | :yellow_circle:  | ✔                | :yellow_circle:  |
+| 1.2.x                         | :yellow_circle:  | :yellow_circle:  | ✔                |
 
 Explanation:
 
@@ -119,7 +127,7 @@ This code snippet shows how to recognize unknown face.
 ```python
 image_path: str = 'examples/common/jonathan-petit-unsplash.jpg'
 
-recognition.recognize(image_path=image_path)
+recognition.recognize_image(image_path=image_path)
 ```
 
 ## Webcam demo
@@ -236,6 +244,10 @@ If the option’s value is set in the global object and passed as a function arg
 
 ```python 
 
+class PredictionCountOptionsDict(TypedDict):
+    prediction_count: int
+
+
 class DetProbOptionsDict(TypedDict):
     det_prob_threshold: float
 
@@ -246,8 +258,18 @@ class ExpandedOptionsDict(DetProbOptionsDict):
     face_plugins: str
 
 
+class SavedObjectOptions(TypedDict):
+    page: int
+    size: int
+    subject: str
+
+
 class AllOptionsDict(ExpandedOptionsDict):
     prediction_count: int
+
+
+class RecognizeOptionsDict(AllOptionsDict):
+    detect_faces: bool
 
 ```
 | Option              | Type    | Notes                                     |
@@ -257,16 +279,21 @@ class AllOptionsDict(ExpandedOptionsDict):
 | prediction_count    | integer | maximum number of subject predictions per face. It returns the most similar subjects. Default value: 1    |
 | face_plugins        | string  | comma-separated slugs of face plugins. If empty, no additional information is returned. [Learn more](https://github.com/exadel-inc/CompreFace/tree/master/docs/Face-services-and-plugins.md)    |
 | status              | boolean | if true includes system information like execution_time and plugin_version fields. Default value is false    |
+| detect_faces              | boolean | if true the parameter specifies whether to perform image detection or not. Default value is true   |
+| page      | integer |  page number of examples to return. Can be used for pagination. Default value is 0.      |
+| size      | integer | faces on page (page size). Can be used for pagination. Default value is 20.             |
+| subject   | string  | what subject examples endpoint should return. If empty, return examples for all subjects.|
 
 Example of face recognition with object:
 
 ```python
-recognition.recognize(image_path=image_path, options={
+recognition.recognize_image(image_path=image_path, options={
     "limit": 0,
     "det_prob_threshold": 0.8,
     "prediction_count": 1,
     "face_plugins": "calculator,age,gender,landmarks",
-    "status": "true"
+    "status": "true",
+    "detect_faces": True,
 })
 ```
 
@@ -286,13 +313,13 @@ Recognizes all faces from the image.
 The first argument is the image location, it can be an url, local path or bytes.
 
 ```python
-recognition.recognize(image_path, options)
+recognition.recognize_image(image_path, options)
 ```
 
 | Argument           | Type    | Required | Notes                                                                                                                                          |
 | ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | image_path         | image   | required | Image can pass from url, local path or bytes. Max size is 5Mb                                                         |
-| options            | object  | optional | `AllOptionsDict` object can be used in this method. See more [here](#options-structure).  |
+| options            | object  | optional | `RecognizeOptionsDict` object can be used in this method. See more [here](#options-structure).  |
 
 Response:
 
@@ -359,6 +386,49 @@ Response:
 | execution_time             | object  | execution time of all plugins                                                                                                                               |
 | plugins_versions           | object  | contains information about plugin versions                                                                                                                  |
 
+### Recognize Faces from a Given Image, Embedding
+
+*[Example](examples/recognize_face_from_embedding.py)*
+
+Determine similarities between input embeddings and embeddings within the Face Collection.
+
+```python
+recognition.recognize_embedding(self, embeddings: list, options: PredictionCountOptionsDict = {})
+```
+
+| Argument           | Type    | Required | Notes                                                                                                                                          |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| embeddings         | list   | required | 	An input embeddings. The length depends on the model (e.g. 512 or 128)                                                         |
+| options            | object  | optional | `PredictionCountOptionsDict` object can be used in this method. See more [here](#options-structure).  |
+
+Response:
+
+```json
+{
+  "result": [
+    {
+      "embedding": [0.0627421774604647, "...", -0.0236684433507126],
+      "similarities": [
+        {
+          "subject": "John",
+          "similarity": 0.55988
+        },
+        "..."
+      ]
+    },
+    "..."
+  ]
+}
+```
+
+| Element      | Type   | Description                                                                                |
+|--------------|--------|--------------------------------------------------------------------------------------------|
+| result       | array  | an array that contains all the results                                                     |
+| embedding    | array  | an input embedding                                                                         |
+| similarities | array  | an array that contains results of similarity between the embedding and the input embedding |
+| subject      | string | a subject in which the similar embedding was found                                         |
+| similarity   | float  | a similarity between the embedding and the input embedding                                 |
+
 ### Get Face Collection
 
 ```python
@@ -411,8 +481,11 @@ Response:
 To retrieve a list of subjects saved in a Face Collection:
 
 ```python
-face_collection.list()
+face_collection.list(options)
 ```
+| Argument           | Type    | Required | Notes                                                                                                                                          |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| options            | object  | optional | `SavedObjectOptions` object can be used in this method. See more [here](#options-structure).  |
 
 Response:
 
@@ -424,7 +497,11 @@ Response:
       "subject": <subject>
     },
     ...
-  ]
+  ],
+  "page_number": int,
+  "page_size": int,
+  "total_pages": int,
+  "total_elements": int
 }
 ```
 
@@ -432,6 +509,10 @@ Response:
 | -------- | ------ | ----------------------------------------------------------------- |
 | image_id | UUID   | UUID of the face                                                  |
 | subject  | string | <subject> of the person, whose picture was saved for this api key |
+| page_number    | integer | page number                                                       |
+| page_size      | integer | **requested** page size                                           |
+| total_pages    | integer | total pages                                                       |
+| total_elements | integer | total faces                                                       |
 
 #### Delete All Examples of the Subject by Name
 
@@ -486,12 +567,40 @@ Response:
 | image_id | UUID   | UUID of the removed face                                          |
 | subject  | string | <subject> of the person, whose picture was saved for this api key |
 
+
+#### Delete Multiple Examples
+*[Example](examples/delete_examples_by_ids.py)*
+To delete several subject examples
+
+```python
+face_collection.delete_multiple(image_ids)
+```
+| Argument  | Type   | Required | Notes                                                        |
+| --------- | ------ | -------- | ------------------------------------------------------------ 
+| image_ids  | list   | required | list of str or UUID of the removing face                                   |
+
+Response:
+
+```
+{
+  "image_id": <image_id>,
+  "subject": <subject>
+}
+```
+
+| Element  | Type   | Description                                                       |
+| -------- | ------ | ----------------------------------------------------------------- |
+| image_id | UUID   | UUID of the removed face                                          |
+| subject  | string | <subject> of the person, whose picture was saved for this api key |
+
+If some image ids are not exists, they will be ignored
+
 #### Verify Faces from a Given Image
 
 *[Example](examples/verification_face_from_image.py)*
 
 ```python
-face_collection.verify(image_path, image_id, options)
+face_collection.verify_image(image_path, image_id, options)
 ```
 
 Compares similarities of given image with image from your face collection.
@@ -566,6 +675,41 @@ Response:
 | execution_time                 | object  | execution time of all plugins                       |
 | plugins_versions               | object  | contains information about plugin versions                       |
 
+
+#### Verify Faces from a Given Image, Embedding
+*[Example](examples/verification_face_from_embedding.py)*
+```python
+face_collection.verify_embeddings(embedding, image_id)
+```
+
+Compare input embeddings to the embedding stored in Face Collection.
+
+
+| Argument           | Type    | Required | Notes                                                                                                                                                 |
+| ------------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| embeddings         | array   | required | An input embeddings. The length depends on the model (e.g. 512 or 128)                                                               |
+| image_id           | str or UUID    | required | 	An id of the source embedding within the Face Collection                                                                                                                            |
+
+Response:
+
+```json
+{
+  "result": [
+    {
+      "embedding": [0.0627421774604647, "...", -0.0236684433507126],
+      "similarity": 0.55988
+    },
+    "..."
+  ]
+}
+```
+
+| Element     | Type   | Description                                                                  |
+|-------------|--------|------------------------------------------------------------------------------|
+| result      | array  | an array that contains all the results                                       |
+| embedding   | array  | a source embedding which we are comparing to embedding from Face Collection  |
+| similarity  | float  | a similarity between the source embedding and embedding from Face Collection |
+
 ### Get Subjects
 
 ```python
@@ -613,6 +757,7 @@ Returns all subject related to Face Collection.
 ```python
 subjects.list()
 ```
+
 
 Response:
 
@@ -792,10 +937,10 @@ A source image should contain only one face which will be compared to all faces 
 
 **Methods:**
 
-### Verify
+### Verify Image
 
 ```python
-verify.verify(source_image_path, target_image_path, options)
+verify.verify_image(source_image_path, target_image_path, options)
 ```
 
 Compares two images provided in arguments. Source image should contain only one face, it will be compared to all faces in the target image.
@@ -902,6 +1047,39 @@ Response:
 | similarity                     | float   | similarity between this face and the face on the source image               |
 | execution_time                 | object  | execution time of all plugins                       |
 | plugins_versions               | object  | contains information about plugin versions                       |
+
+### Verify Embedding
+*[Example](examples/verify_face_from_embedding.py)*
+```python
+verify.verify_embedding(source_embeddings, targets_embeddings)
+```
+
+Determine similarities between an input source embedding and input target embeddings.
+
+| Argument            | Type    | Required | Notes                                                                                                                                                 |
+| ------------------  | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source_embeddings   | list   | required | An input embeddings. The length depends on the model (e.g. 512 or 128)                                           |
+| targets_embeddings   | list   | required | An array of the target embeddings. The length depends on the model (e.g. 512 or 128)                      |
+
+Response:
+
+```json
+{
+  "result": [
+    {
+      "embedding": [0.0627421774604647, "...", -0.0236684433507126],
+      "similarity": 0.55988
+    },
+    "..."
+  ]
+}
+```
+
+| Element     | Type   | Description                                                        |
+|-------------|--------|--------------------------------------------------------------------|
+| result      | array  | an array that contains all the results                             |
+| embedding   | array  | a target embedding which we are comparing to source embedding      |
+| similarity  | float  | a similarity between the source embedding and the target embedding |
 
 # Contributing
 

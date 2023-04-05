@@ -1,4 +1,3 @@
-
 """
     Copyright(c) 2021 the original author or authors
 
@@ -15,6 +14,7 @@
     permissions and limitations under the License.
  """
 
+from compreface.common.typed_dict import DetProbOptionsDict, SavedObjectOptions
 import pytest
 import os
 import httpretty
@@ -23,6 +23,7 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 from compreface.client import AddExampleOfSubjectClient
 from compreface.config.api_list import RECOGNIZE_CRUD_API
 from tests.client.const_config import DOMAIN, PORT, RECOGNIZE_API_KEY, FILE_PATH
+
 """
     Server configuration
 """
@@ -34,13 +35,15 @@ def test_get():
     httpretty.register_uri(
         httpretty.GET,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY},
-        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}'
+        headers={"x-api-key": RECOGNIZE_API_KEY},
+        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}',
     )
     test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
-        RECOGNIZE_API_KEY, DOMAIN, PORT)
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
     response: dict = requests.get(
-        url=url, headers={'x-api-key': RECOGNIZE_API_KEY}).json()
+        url=url, headers={"x-api-key": RECOGNIZE_API_KEY}
+    ).json()
     test_response: dict = test_subject.get()
     assert response == test_response
 
@@ -49,42 +52,72 @@ def test_get():
 def test_delete():
     httpretty.register_uri(
         httpretty.DELETE,
-        url + '?subject=Subject',
-        headers={'x-api-key': RECOGNIZE_API_KEY},
-        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}'
+        url + "?subject=Subject",
+        headers={"x-api-key": RECOGNIZE_API_KEY},
+        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}',
     )
     response: dict = requests.delete(
-        url=url, headers={'x-api-key': RECOGNIZE_API_KEY}).json()
+        url=url, headers={"x-api-key": RECOGNIZE_API_KEY}
+    ).json()
 
     test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
-        RECOGNIZE_API_KEY, DOMAIN, PORT)
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
     test_response: dict = test_subject.delete("Subject")
     assert response == test_response
 
 
 @httpretty.activate(verbose=True, allow_net_connect=False)
 def test_post():
-
     httpretty.register_uri(
         httpretty.POST,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY,
-                 'Content-Type': 'multipart/form-data'},
-        body='{"image_id": "image_id_subject", "subject": "Subject"}'
+        headers={"x-api-key": RECOGNIZE_API_KEY, "Content-Type": "multipart/form-data"},
+        body='{"image_id": "image_id_subject", "subject": "Subject"}',
     )
 
     name_img: str = os.path.basename(FILE_PATH)
     m: MultipartEncoder = MultipartEncoder(
-        fields={'file': (name_img, open(FILE_PATH, 'rb'))}
+        fields={"file": (name_img, open(FILE_PATH, "rb"))}
     )
     response: dict = requests.post(
-        url=url, data=m, headers={'x-api-key': RECOGNIZE_API_KEY,
-                                  'Content-Type': 'multipart/form-data'}).json()
+        url=url,
+        data=m,
+        headers={"x-api-key": RECOGNIZE_API_KEY, "Content-Type": "multipart/form-data"},
+    ).json()
 
     test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
-        RECOGNIZE_API_KEY, DOMAIN, PORT)
-    test_response: dict = test_subject.post(
-        FILE_PATH, "Subject")
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
+    test_response: dict = test_subject.post(FILE_PATH, "Subject")
+    assert response == test_response
+
+
+@httpretty.activate(verbose=True, allow_net_connect=False)
+def test_post_with_options():
+    options_url: str = url + "?subject=Subject&det_prob_threshold=1"
+    httpretty.register_uri(
+        httpretty.POST,
+        options_url,
+        headers={"x-api-key": RECOGNIZE_API_KEY, "Content-Type": "multipart/form-data"},
+        body='{"image_id": "image_id_subject", "subject": "Subject"}',
+    )
+
+    name_img: str = os.path.basename(FILE_PATH)
+    m: MultipartEncoder = MultipartEncoder(
+        fields={"file": (name_img, open(FILE_PATH, "rb"))}
+    )
+    response: dict = requests.post(
+        url=options_url,
+        data=m,
+        headers={"x-api-key": RECOGNIZE_API_KEY, "Content-Type": "multipart/form-data"},
+    ).json()
+
+    test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
+    options: DetProbOptionsDict = {"det_prob_threshold": 1}
+    test_response: dict = test_subject.post(FILE_PATH, "Subject", options)
     assert response == test_response
 
 
@@ -93,30 +126,30 @@ def test_post_incorrect_response():
     httpretty.register_uri(
         httpretty.POST,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY,
-                 'Content-Type': 'multipart/form-data'},
-        body='{"image_id": "image_id_subject", "subject": "Subject"}'
+        headers={"x-api-key": RECOGNIZE_API_KEY, "Content-Type": "multipart/form-data"},
+        body='{"image_id": "image_id_subject", "subject": "Subject"}',
     )
 
     name_img: str = os.path.basename(FILE_PATH)
     m: MultipartEncoder = MultipartEncoder(
-        fields={'file': (name_img, open(FILE_PATH, 'rb'))}
+        fields={"file": (name_img, open(FILE_PATH, "rb"))}
     )
     response: dict = requests.post(
-        url=url, data=m, headers={'x-api-key': RECOGNIZE_API_KEY,
-                                  'Content-Type': 'multipart/form-data'}).json()
+        url=url,
+        data=m,
+        headers={"x-api-key": RECOGNIZE_API_KEY, "Content-Type": "multipart/form-data"},
+    ).json()
 
     httpretty.register_uri(
         httpretty.POST,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY,
-                 'Content-Type': 'multipart/form-data'},
-        body='{"image_id": "image_id_subjectssss", "subject": "Subjectss"}'
+        headers={"x-api-key": RECOGNIZE_API_KEY, "Content-Type": "multipart/form-data"},
+        body='{"image_id": "image_id_subjectssss", "subject": "Subjectss"}',
     )
     test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
-        RECOGNIZE_API_KEY, DOMAIN, PORT)
-    test_response: dict = test_subject.post(
-        FILE_PATH, "Subject")
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
+    test_response: dict = test_subject.post(FILE_PATH, "Subject")
     assert response != test_response
 
 
@@ -125,41 +158,73 @@ def test_get_with_empty_list():
     httpretty.register_uri(
         httpretty.GET,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY},
-        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}'
+        headers={"x-api-key": RECOGNIZE_API_KEY},
+        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}',
     )
     test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
-        RECOGNIZE_API_KEY, DOMAIN, PORT)
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
     response: dict = requests.get(
-        url=url, headers={'x-api-key': RECOGNIZE_API_KEY}).json()
+        url=url, headers={"x-api-key": RECOGNIZE_API_KEY}
+    ).json()
     httpretty.register_uri(
         httpretty.GET,
         url,
-        headers={'x-api-key': RECOGNIZE_API_KEY},
-        body='{"faces": []}'
+        headers={"x-api-key": RECOGNIZE_API_KEY},
+        body='{"faces": []}',
     )
     test_response: dict = test_subject.get()
     assert response != test_response
 
 
 @httpretty.activate(verbose=True, allow_net_connect=False)
+def test_get_with_options():
+    options_url = url + "?&page=1&size=5&subject=Subject"
+    httpretty.register_uri(
+        httpretty.GET,
+        options_url,
+        headers={"x-api-key": RECOGNIZE_API_KEY},
+        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}',
+    )
+    test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
+    response: dict = requests.get(
+        url=options_url, headers={"x-api-key": RECOGNIZE_API_KEY}
+    ).json()
+    options: SavedObjectOptions = {"page": 1, "size": 5, "subject": "Subject"}
+    test_response: dict = test_subject.get(options)
+    assert response == test_response
+
+
+@httpretty.activate(verbose=True, allow_net_connect=False)
 def test_delete_incorrect_response():
     httpretty.register_uri(
         httpretty.DELETE,
-        url + '?subject=Subject',
-        headers={'x-api-key': RECOGNIZE_API_KEY},
-        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}'
+        url + "?subject=Subject",
+        headers={"x-api-key": RECOGNIZE_API_KEY},
+        body='{"faces": [{"image_id": "image_id_subject", "subject": "Subject"}]}',
     )
     response: dict = requests.delete(
-        url=url, headers={'x-api-key': RECOGNIZE_API_KEY}).json()
+        url=url, headers={"x-api-key": RECOGNIZE_API_KEY}
+    ).json()
 
     httpretty.register_uri(
         httpretty.DELETE,
-        url + '?subject=Subject',
-        headers={'x-api-key': RECOGNIZE_API_KEY},
-        body='{"faces": []}'
+        url + "?subject=Subject",
+        headers={"x-api-key": RECOGNIZE_API_KEY},
+        body='{"faces": []}',
     )
     test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
-        RECOGNIZE_API_KEY, DOMAIN, PORT)
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
     test_response: dict = test_subject.delete("Subject")
     assert response != test_response
+
+
+def test_not_implemented_methods():
+    test_subject: AddExampleOfSubjectClient = AddExampleOfSubjectClient(
+        RECOGNIZE_API_KEY, DOMAIN, PORT
+    )
+
+    assert test_subject.put() is None

@@ -14,28 +14,26 @@
     permissions and limitations under the License.
  """
 
-from compreface.client.verify_face_from_image import VerifyFaceFromImageClient
-from compreface.common.typed_dict import ExpandedOptionsDict
+from compreface.common.typed_dict import PredictionCountOptionsDict
 from dataclasses import dataclass
+from ..client import RecognizeFaceFromEmbeddingClient
 
 
-class VerifyFaceFromImage:
-
+class RecognizeFaceFromEmbedding:
     @dataclass
     class Request:
         api_key: str
-        source_image_path: str
-        target_image_path: str
+        embeddings: list
 
     def __init__(self, domain: str, port: str, api_key: str):
-        self.verify_face_from_image = VerifyFaceFromImageClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
+        self.recognize_face_from_embeddings = RecognizeFaceFromEmbeddingClient(
+            api_key=api_key, domain=domain, port=port
         )
 
-    def execute(self, request: Request, options: ExpandedOptionsDict = {}):
-        result: dict = self.verify_face_from_image.post(request.source_image_path,
-                                                        request.target_image_path,
-                                                        options)
+    def execute(
+        self, request: Request, options: PredictionCountOptionsDict = {}
+    ) -> dict:
+        result: dict = self.recognize_face_from_embeddings.post(
+            request.embeddings, options
+        )
         return result

@@ -19,7 +19,6 @@ from ..client import AddExampleOfSubjectClient
 
 
 class DeleteAllExamplesOfSubjectByName:
-
     @dataclass
     class Request:
         api_key: str
@@ -27,9 +26,7 @@ class DeleteAllExamplesOfSubjectByName:
 
     def __init__(self, domain: str, port: str, api_key: str):
         self.add_example_of_subject = AddExampleOfSubjectClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
+            api_key=api_key, domain=domain, port=port
         )
 
     def execute(self, request: Request) -> dict:

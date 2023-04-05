@@ -20,17 +20,12 @@ from compreface.client.subject_client import SubjectClient
 
 
 class GetSubjects:
-
     @dataclass
     class Request:
         pass
 
     def __init__(self, domain: str, port: str, api_key: str):
-        self.subject_client = SubjectClient(
-            api_key=api_key,
-            domain=domain,
-            port=port
-        )
+        self.subject_client = SubjectClient(api_key=api_key, domain=domain, port=port)
 
     def execute(self) -> dict:
         result: dict = self.subject_client.get()
