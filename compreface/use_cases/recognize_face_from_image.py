@@ -14,7 +14,7 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.typed_dict import AllOptionsDict
+from compreface.common.typed_dict import RecognizeOptionsDict
 from dataclasses import dataclass
 from ..client import RecognizeFaceFromImageClient
 
@@ -30,6 +30,6 @@ class RecognizeFaceFromImage:
             api_key=api_key, domain=domain, port=port
         )
 
-    def execute(self, request: Request, options: AllOptionsDict = {}) -> dict:
+    def execute(self, request: Request, options: RecognizeOptionsDict = {}) -> dict:
         result: dict = self.recognize_face_from_image.post(request.image_path, options)
         return result

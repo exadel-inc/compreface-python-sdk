@@ -267,6 +267,10 @@ class SavedObjectOptions(TypedDict):
 class AllOptionsDict(ExpandedOptionsDict):
     prediction_count: int
 
+
+class RecognizeOptionsDict(AllOptionsDict):
+    detect_faces: bool
+
 ```
 | Option              | Type    | Notes                                     |
 | --------------------| ------  | ----------------------------------------- |
@@ -275,6 +279,10 @@ class AllOptionsDict(ExpandedOptionsDict):
 | prediction_count    | integer | maximum number of subject predictions per face. It returns the most similar subjects. Default value: 1    |
 | face_plugins        | string  | comma-separated slugs of face plugins. If empty, no additional information is returned. [Learn more](https://github.com/exadel-inc/CompreFace/tree/master/docs/Face-services-and-plugins.md)    |
 | status              | boolean | if true includes system information like execution_time and plugin_version fields. Default value is false    |
+| detect_faces              | boolean | if true the parameter specifies whether to perform image detection or not. Default value is true   |
+| page      | integer |  page number of examples to return. Can be used for pagination. Default value is 0.      |
+| size      | integer | faces on page (page size). Can be used for pagination. Default value is 20.             |
+| subject   | string  | what subject examples endpoint should return. If empty, return examples for all subjects.|
 
 Example of face recognition with object:
 
@@ -284,7 +292,8 @@ recognition.recognize_image(image_path=image_path, options={
     "det_prob_threshold": 0.8,
     "prediction_count": 1,
     "face_plugins": "calculator,age,gender,landmarks",
-    "status": "true"
+    "status": "true",
+    "detect_faces": True,
 })
 ```
 
@@ -310,7 +319,7 @@ recognition.recognize_image(image_path, options)
 | Argument           | Type    | Required | Notes                                                                                                                                          |
 | ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | image_path         | image   | required | Image can pass from url, local path or bytes. Max size is 5Mb                                                         |
-| options            | object  | optional | `AllOptionsDict` object can be used in this method. See more [here](#options-structure).  |
+| options            | object  | optional | `RecognizeOptionsDict` object can be used in this method. See more [here](#options-structure).  |
 
 Response:
 

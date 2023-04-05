@@ -31,6 +31,7 @@ compre_face: CompreFace = CompreFace(
         "prediction_count": 1,
         "status": "true",
         "face_plugins": "calculator",
+        "detect_faces": True,
     },
 )
 

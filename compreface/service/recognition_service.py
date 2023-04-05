@@ -14,7 +14,11 @@
     permissions and limitations under the License.
  """
 
-from compreface.common.typed_dict import AllOptionsDict, PredictionCountOptionsDict
+from compreface.common.typed_dict import (
+    AllOptionsDict,
+    PredictionCountOptionsDict,
+    RecognizeOptionsDict,
+)
 from typing import List
 
 from ..common import Service
@@ -51,7 +55,9 @@ class RecognitionService(Service):
         """
         return self.available_services
 
-    def recognize_image(self, image_path: str, options: AllOptionsDict = {}) -> dict:
+    def recognize_image(
+        self, image_path: str, options: RecognizeOptionsDict = {}
+    ) -> dict:
         """
         Recognize faces from the uploaded image
 

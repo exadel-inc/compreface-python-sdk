@@ -42,6 +42,10 @@ class AllOptionsDict(ExpandedOptionsDict):
     prediction_count: int
 
 
+class RecognizeOptionsDict(AllOptionsDict):
+    detect_faces: bool
+
+
 """ 
     Checks fields with necessary rules.
     :param name: key from dictionary.
@@ -78,7 +82,7 @@ def check_fields_by_name(name: str, value: Any):
                 and row.find("pose") == -1
             ):
                 raise IncorrectFieldException(
-                    "face_plugins must be only contains calculator,age,gender,landmarks,mask. "
+                    "face_plugins must be only contains calculator,age,gender,landmarks,mask,pose."
                     "Incorrect value {}".format(row)
                 )
     if name == "page" or name == "size":
